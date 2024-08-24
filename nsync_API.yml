@@ -1,0 +1,36 @@
+openapi: '3.0.3'
+info:
+  title: 'N Sync API Description'
+  version: '1.0'
+servers:
+  - url: https://api.server.test
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
+  /v1/user:
+    post:
+      tags:
+      - Users
+      summary: Resgister a new user into the app.
+      responses:
+        '201':
+          description: Get
+  /v1/documents:
+    post:
+      tags:
+      - Documents
+      summary: Upload new documents into the app.
+      responses:
+        '201':
+          description: 'A new document was created.'
+    get:
+      tags:
+        - Documents
+      summary: Get document per users
+      responses:
+        '200':
+          description: 'Documents were retrieved correctly.'
+
