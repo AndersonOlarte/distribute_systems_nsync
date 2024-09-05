@@ -1,0 +1,21 @@
+
+CREATE TABLE IF NOT EXISTS "User" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "identification" VARCHAR(20) NOT NULL UNIQUE,
+    "name" VARCHAR(50) NOT NULL UNIQUE,
+    "middle_name" VARCHAR(50),
+    "last_name" VARCHAR(50) NOT NULL,
+    "age" INT NOT NULL,
+
+)
+
+CREATE TABLE IF NOT EXISTS "Document" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "filename" VARCHAR(200) NOT NULL,
+    "url" TEXT NOT NULL,
+    "owner" INT NOT NULL,
+    "created_date" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_date" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "is_actived" BOOLEAN NOT NULL DEFAULT TRUE
+    FOREIGN KEY ("owner") REFERENCES "User"("id")
+);

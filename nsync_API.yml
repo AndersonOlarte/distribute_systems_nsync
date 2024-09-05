@@ -10,7 +10,14 @@ paths:
       responses:
         '200':
           description: OK
-  /v1/user:
+  /v1/users:
+    get:
+      tags:
+      - Users
+      summary: Gets all users registered in the system.
+      responses:
+        '200':
+          description: All users retrieved succesfully.
     post:
       tags:
       - Users
@@ -34,3 +41,145 @@ paths:
         '200':
           description: 'Documents were retrieved correctly.'
 
+  /v1/folders:
+    post:
+      tags:
+        - Folders
+      summary: Create a new folder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/folderInput'
+
+      responses:
+        '201':
+          description: Create a new folder
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/folderOutput'
+
+
+
+components:
+  schemas:
+  # User elements
+    user:
+      description: 'A person representation'
+      type: object
+      properties:
+        id:
+          type: integer
+        identification:
+          type: string
+        name:
+          type: string
+        age:
+          type: integer
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        isActive: 
+          type: boolean
+      example:
+        id: 3045930495309453
+        name: 'Jhon Doe'
+        age: 45
+        email: 'jhon.doe@example.com'
+        createdAt: '29-07-2024 12:01:34 UTC'
+        updatedAt: '29-07-2024 12:01:34 UTC'
+        isActive: True
+
+
+#Document elements
+    document:
+      description: 'document file metadata'
+      type: object
+      properties:
+        id:
+          type: integer
+        filename:
+          type: integer
+        url:
+          type: string
+        owner:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        isActive: 
+          type: boolean
+      example:
+        id: 3045930495309453
+        name: 'Buyways diplomma'
+        owner: 34593459384752983
+        url: 'https://www.example.com'
+        createdAt: '29-07-2024 12:01:34 UTC'
+        updatedAt: '29-07-2024 12:01:34 UTC'
+        isActive: True
+# Folder elements
+
+    folder:
+      description: 'Database entity'
+      type: object
+      properties:
+        id: 
+          type: integer
+        name:
+          type: string
+        level:
+          type: integer
+        parentFolder:
+          type: integer
+        createdDate:
+          type: string
+        updatedDate:
+          type: string
+        isActived:
+          type: boolean
+
+    folderInput:
+      description: expected object to create a new folder
+      type: object
+      properties:
+        name:
+          type: string
+        parentFolderId:
+          type: integer
+      example:
+        name: personal documents
+        parentFolderId: 12
+
+    folderOutput:
+      description: folder created
+      type: object
+      properties:
+        id: 
+          type: integer
+        name:
+          type: string
+        level:
+          type: integer
+        parentFolder:
+          type: string
+        createdDate:
+          type: string
+        updatedDate:
+          type: string
+        isActived:
+          type: boolean
+      example:
+        id: 3428
+        name: personal Documents
+        level: 4
+        parentFolder: My documents
+        createDate: '12/09/2024 12:15:00 UTC'
+        updatedDate: '12/09/2024 12:15:00 UTC'
+
+        
