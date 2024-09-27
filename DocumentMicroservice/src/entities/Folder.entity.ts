@@ -61,7 +61,6 @@ export class FolderOutput {
     isActived: boolean;
 
     constructor (folder: Folder) {
-        console.log(this.parentFolderId)
         this.id = folder.id;
         this.name = folder.name;
         this.level = folder.level;

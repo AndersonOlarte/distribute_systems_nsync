@@ -1,10 +1,20 @@
 import { Router } from "express";
-import { createFolder, getChildFolders } from "../controllers/folder.controller";
+import { createFolder, createRootFolder, deleteFolder, getChildFolders, getFolderContent, getFolderMetaDataById } from "../controllers/folder.controller";
 
 const routerFolder = Router();
 
-routerFolder.post('/v1/folders', createFolder);
+routerFolder.post('/v1/users/:userid/folders', createFolder);
 
-routerFolder.get('/v1/folders/:id/child-folders', getChildFolders);
+routerFolder.delete('/v1/users/:userid/folders/:folderid', deleteFolder);
+
+routerFolder.post('/v1/users/:userid/folders/root-folder', createRootFolder);
+
+routerFolder.get('/v1/users/:userid/folders/:folderid/child-folders', getChildFolders);
+
+routerFolder.get('/v1/users/:userid/folders/:folderid', getFolderMetaDataById);
+
+routerFolder.get('/v1/users/:userid/folders/:folderid/content', getFolderContent);
+
+
 
 export default routerFolder;

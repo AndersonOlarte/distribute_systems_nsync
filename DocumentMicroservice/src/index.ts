@@ -1,18 +1,16 @@
 import app from './app';
 import { startConnetionWithDb } from './db-connection';
 
-const PORT = 3001;
+const PORT = 3000;
 
 async function main() {
     try {
         app.listen(PORT);
         await startConnetionWithDb();
-        console.log('Database initialized');
-        console.log('Server is listening port: ', PORT);
+        console.log('Server listening port: ', process.env.DOCUMENT_SERVICE_PORT);
     } catch (error) {
-        console.error(error);
+        
     }
-    
-}
+};
 
 main();

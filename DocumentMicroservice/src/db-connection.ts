@@ -12,7 +12,7 @@ const AppDataSource = new DataSource({
     port: 5432,
     entities: [User, Folder, Document],
     logging: true,
-    synchronize: true
+    synchronize: false
 })
 
 export async function startConnetionWithDb() {
@@ -21,5 +21,4 @@ export async function startConnetionWithDb() {
         .catch((err)=>console.error(err));
 }
 
-export const folderRepository = AppDataSource.getRepository(Folder);
-export const userRepository = AppDataSource.getRepository(User);
+export const documentRepository = AppDataSource.getRepository(Document);

@@ -3,7 +3,7 @@ info:
   title: 'N Sync API Description'
   version: '1.0'
 servers:
-  - url: https://api.server.test
+  - url: http://localhost:3000
 paths:
   /test:
     get:
@@ -40,17 +40,30 @@ paths:
       responses:
         '200':
           description: 'Documents were retrieved correctly.'
+  
+  /v1/documents/request-docs:
+    get:
+      tags:
+        - Documents
 
-  /v1/folders:
+
+  /v1/users/{userid}/folders:
     post:
       tags:
         - Folders
       summary: Create a new folder
+      parameters:
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: number
+
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/folderInput'
+              $ref: '#/components/schemas/createFolderInput'
 
       responses:
         '201':
@@ -58,12 +71,65 @@ paths:
           content:
             application/json:
               schema:
-               $ref: '#/components/schemas/folderOutput'
+               $ref: '#/components/schemas/createFolderOutput'
 
+  /v1/folders/{id}:
+    delete:
+      tags:
+        - Folders
+      summary: Delete a folder and its children
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: 
+            $ref: '#/components/schemas/id'
+      responses:
+        '200':
+          description: Delete folder and its children
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/folder'
+              
+
+  /v1/folders/{id}/child-folders:
+    get:
+      tags:
+        - Folders
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: 
+            $ref: '#/components/schemas/id'
+      responses:
+        '200':
+          description: Get folder childen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  example:
+                      type: string
+
+  /v1/notification:
+    get:
+      tags:
+        - Notifications
 
 
 components:
   schemas:
+#------------------  Field elements
+    id:
+      description: 'unique identification for a record in DB'
+      type: integer
+      example: 4059
+
+
+
   # User elements
     user:
       description: 'A person representation'
@@ -144,7 +210,7 @@ components:
         isActived:
           type: boolean
 
-    folderInput:
+    createFolderInput:
       description: expected object to create a new folder
       type: object
       properties:
@@ -156,10 +222,10 @@ components:
         name: personal documents
         parentFolderId: 12
 
+
     folderOutput:
-      description: folder created
       type: object
-      properties:
+      properties:    
         id: 
           type: integer
         name:
@@ -174,12 +240,36 @@ components:
           type: string
         isActived:
           type: boolean
+    createFolderOutput:
+      description: folder output created
+      type: object
+      properties:
+        message: 
+          type: string
+        folder:
+          $ref: '#/components/schemas/folderOutput'
       example:
-        id: 3428
-        name: personal Documents
-        level: 4
-        parentFolder: My documents
-        createDate: '12/09/2024 12:15:00 UTC'
-        updatedDate: '12/09/2024 12:15:00 UTC'
+        message: 'Folder created succesfully.'
+        folder:
+          id: 3428
+          name: personal Documents
+          level: 4
+          parentFolderId: 65
+          createDate: '12/09/2024 12:15:00 UTC'
+          updatedDate: '12/09/2024 12:15:00 UTC'
+          isActive: true
+    
+    getChildrenFolderOutput:
+      properties:
+        message:
+          type: string
+        chidfolders:
+          type: array
+          items:
+            $ref: '#/components/schemas/createFolderOutput'
+            
+            
+             
+            
 
         
