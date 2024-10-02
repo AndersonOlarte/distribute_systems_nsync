@@ -2,4 +2,5 @@ class NotificationService:
 
     @staticmethod
     def send_notification(user_id, action, timestamp):
-        pass
+        print(f"CIELOS; FUI A NOTIFICAR {user_id}")
+

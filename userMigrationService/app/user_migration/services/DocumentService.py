@@ -2,8 +2,8 @@ class DocumentService:
 
     @staticmethod
     def save_user_documents(user_id, documents):
-        pass
+        print(f"CIELOS; RECIBI DOCUMENTOS para user id {user_id}")
 
     @staticmethod
     def delete_user_documents(user_id):
-        pass
+        print(f"CIELOS; BORRE DOCUMENTOS {user_id}")
