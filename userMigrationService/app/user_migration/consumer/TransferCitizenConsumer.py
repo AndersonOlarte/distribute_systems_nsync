@@ -9,7 +9,7 @@ from app.user_migration.services.QueueService import QueueService
 EXCHANGE = os.getenv("EXCHANGE_NAME", "user_migration_exchange")
 QUEUE_NAME = 'transferCitizen_queue'
 RETRY_QUEUE_NAME = 'transferCitizen_retry_queue'
-DLX_NAME = 'dead_letter_exchange'
+DLX_NAME = 'user_migration_dead_letter_exchange'
 DLQ_NAME = 'dead_letter_transferCitizen_queue'
 
 BASE_DELAY = 5000

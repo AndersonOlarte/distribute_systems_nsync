@@ -13,4 +13,5 @@ services:
       RABBITMQ_DEFINITIONS_FILE: /etc/rabbitmq/definitions.json
     volumes:
       - ./definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     restart: unless-stopped

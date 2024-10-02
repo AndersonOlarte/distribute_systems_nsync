@@ -31,7 +31,7 @@
       "arguments": {}
     },
     {
-      "name": "dead_letter_exchange",
+      "name": "user_migration_dead_letter_exchange",
       "vhost": "/",
       "type": "direct",
       "durable": true,
@@ -47,7 +47,7 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-dead-letter-exchange": "dead_letter_exchange",
+        "x-dead-letter-exchange": "user_migration_dead_letter_exchange",
         "x-dead-letter-routing-key": "confirmCitizen_retry_queue"
       }
     },
@@ -63,6 +63,27 @@
       }
     },
     {
+      "name": "transferCitizen_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "user_migration_dead_letter_exchange",
+        "x-dead-letter-routing-key": "transferCitizen_retry_queue"
+      }
+    },
+    {
+      "name": "transferCitizen_retry_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 5000,
+        "x-dead-letter-exchange": "user_migration_exchange",
+        "x-dead-letter-routing-key": "transferCitizen_queue"
+      }
+    },
+    {
       "name": "dead_letter_confirmCitizen_queue",
       "vhost": "/",
       "durable": true,
@@ -70,7 +91,7 @@
       "arguments": {}
     },
     {
-      "name": "transferCitizen_queue",
+      "name": "dead_letter_transferCitizen_queue",
       "vhost": "/",
       "durable": true,
       "auto_delete": false,
@@ -87,7 +108,15 @@
       "arguments": {}
     },
     {
-      "source": "dead_letter_exchange",
+      "source": "user_migration_exchange",
+      "vhost": "/",
+      "destination": "transferCitizen_queue",
+      "destination_type": "queue",
+      "routing_key": "transferCitizen_queue",
+      "arguments": {}
+    },
+    {
+      "source": "user_migration_dead_letter_exchange",
       "vhost": "/",
       "destination": "confirmCitizen_retry_queue",
       "destination_type": "queue",
@@ -95,7 +124,7 @@
       "arguments": {}
     },
     {
-      "source": "dead_letter_exchange",
+      "source": "user_migration_dead_letter_exchange",
       "vhost": "/",
       "destination": "dead_letter_confirmCitizen_queue",
       "destination_type": "queue",
@@ -103,11 +132,19 @@
       "arguments": {}
     },
     {
-      "source": "user_migration_exchange",
+      "source": "user_migration_dead_letter_exchange",
       "vhost": "/",
-      "destination": "transferCitizen_queue",
+      "destination": "transferCitizen_retry_queue",
       "destination_type": "queue",
-      "routing_key": "transferCitizen_queue",
+      "routing_key": "transferCitizen_retry_queue",
+      "arguments": {}
+    },
+    {
+      "source": "user_migration_dead_letter_exchange",
+      "vhost": "/",
+      "destination": "dead_letter_transferCitizen_queue",
+      "destination_type": "queue",
+      "routing_key": "dead_letter_transferCitizen_queue",
       "arguments": {}
     }
   ]
