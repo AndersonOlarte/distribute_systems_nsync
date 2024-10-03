@@ -18,8 +18,7 @@ export class UserService {
     
     async deleteUserById(userId: number) {
         try {
-            
-            const documentServiceResponse = await this.documentMicroservice.deleteDocumentsByUserId(userId);
+            await this.documentMicroservice.deleteDocumentsByUserId(userId);
             const deleteResult = await userRepository.delete({
                 id: userId
             });
@@ -40,7 +39,6 @@ export class UserService {
             newUser.govCarpetaId = userInput.govCarpetaId;
             await newUser.save();
             const wasUserCreated = await this.folderMicroservice.createRootFolder(newUser.id);
-            console.log('ws user created',wasUserCreated);
             if (wasUserCreated) return newUser;
             return null;
 
@@ -77,12 +75,25 @@ export class UserService {
                     citizenEmail: user.email,
                     Documents: documentList
                 }
-                console.log(transferDocsBody);
-                fetch(transferURL, {
-                    method: 'POST',
-                    body: JSON.stringify(transferDocsBody)
-                });
-                return true;
+                const govCarpetaResponse = await fetch("govcarpeta-apis-83e1c996379d.herokuapp.com/", {
+                    method: 'DELETE',
+                    body: JSON.stringify({
+                        id: user.govCarpetaId,
+                        operatorId: "66ca18cd66ca9f0015a8afb3",
+                        operatorName: "Nsync"
+                    })
+                })
+                if(govCarpetaResponse.ok) {
+                    fetch(transferURL, {
+                        method: 'POST',
+                        body: JSON.stringify(transferDocsBody)
+                    });
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                
             }
             return null;
         } catch (error) {
@@ -105,7 +116,6 @@ export class UserService {
                 const rootFolder = user.folders.find((folder) => folder.isRootFolder === true);
                 if (rootFolder) {
                     const getFolderContent: IFolderItem[] = await this.folderMicroservice.getFolderContent(rootFolder);
-                    console.log(getFolderContent);
                     return getFolderContent;
                 }
                 console.log('there was not root folder');
