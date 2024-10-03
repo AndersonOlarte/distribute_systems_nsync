@@ -24,12 +24,6 @@ class QueueService:
         connection = QueueService.get_connection()
         channel = connection.channel()
 
-        channel.exchange_declare(exchange=EXCHANGE, exchange_type='direct', durable=True)
-
-        #channel.queue_declare(queue=routing_keys_by_operation[operation], durable=True)
-        #channel.queue_bind(exchange=EXCHANGE, queue=routing_keys_by_operation[operation],
-        #                   routing_key=routing_keys_by_operation[operation])
-
         channel.basic_publish(
             exchange=EXCHANGE,
             routing_key=routing_keys_by_operation[operation],
