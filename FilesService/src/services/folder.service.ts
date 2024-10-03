@@ -1,5 +1,5 @@
 import { Folder, FolderOutput } from "../entities/Folder.entity";
-import { folderRepository } from "../db-connection";
+import { folderRepository, userRepository } from "../db-connection";
 import { User } from "../entities/User.entity";
 import { UserService } from "./user.service";
 import { DocumentMicroservice } from "../mockServices/DocumentMicroservice";
@@ -51,7 +51,6 @@ export class FolderService {
                         id: folderId
                     }
                 })
-                console.log(folder);
                 resolve(folder);
             } catch (error) {
                 reject('there was an error getting folder by ID');
@@ -192,5 +191,20 @@ export class FolderService {
             }
             reject('Folder was not found');
         })
+    }
+
+    async deleteFoldersRelatedToUser(userId: number) {
+        try {
+            const deleteProcessResult = await folderRepository.delete({
+                owner: {
+                    id: userId
+                }
+            })
+            if (deleteProcessResult.affected) return true;
+            return false;
+        } catch (error) {
+            console.error('there was an error trying to delete folders to user');
+            return false;
+        }
     }
 }

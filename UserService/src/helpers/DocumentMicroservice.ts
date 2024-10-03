@@ -1,11 +1,10 @@
 import fetch from "node-fetch";
-import { GetDocumentsByFolderId } from "../helpers/DocumentMicroservice.types";
+import { GetDocumentsByFolderId } from './DocumentMicroservice.types'
 
 export class DocumentMicroservice {
 
-
     async getDocumentsByFolderId(userid: number, folderid: number): Promise<GetDocumentsByFolderId | null> {
-        const documentMicroserviceURL = `http://localhost:3000/v1/users/${userid}/folders/${folderid}/documents`
+        const documentMicroserviceURL = `${process.env.DOCUMENT_SERVICE_URL}:${process.env.DOCUMENT_SERVICE_PORT}/v1/users/${userid}/folders/${folderid}/documents`
         
         try {
             const documentMicroseriveReq  = await fetch(documentMicroserviceURL);
@@ -27,7 +26,7 @@ export class DocumentMicroservice {
     }
 
     async deleteDocumentsByUserId(userid: number): Promise<GetDocumentsByFolderId | null> {
-        const documentMicroserviceURL = `${process.env.DOCUMENT_MICROSERVICE_URL}:${process.env.DOCUMENT_MICROSERVICE_PORT}/v1/users/${userid}/delete-docs`
+        const documentMicroserviceURL = `http://localhost:3000/v1/users/${userid}/delete-docs`
         
         try {
             const documentMicroseriveReq  = await fetch(documentMicroserviceURL, {method: 'DELETE'});

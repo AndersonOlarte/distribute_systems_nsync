@@ -1,6 +1,103 @@
+/* App.css */
+body {
+  background-color: #F3F3F3; /* Gris claro */
+  color: #333333; /* Gris oscuro */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-:root {
-  --primary-color: red;
-  --secondary-color:
-  --main-background-color: 
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  background-color: #217346; /* Verde Excel */
+  color: #FFFFFF; /* Blanco */
+  width: 250px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 20px 0;
+  font-size: 18px;
+}
+
+.sidebar li:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #FFFFFF; /* Blanco */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #DDDDDD;
+}
+
+.header h1 {
+  color: #217346; /* Verde Excel */
+}
+
+.header .button {
+  background-color: #217346; /* Verde Excel */
+  border: none;
+  color: #FFFFFF; /* Blanco */
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.header .button:hover {
+  background-color: #1b5d3a;
+}
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background-color: #FFFFFF;
+  overflow-y: auto;
+}
+
+.file-card {
+  background-color: #F3F3F3; /* Gris claro */
+  padding: 15px;
+  border: 1px solid #DDDDDD;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.file-card:hover {
+  background-color: #EAEAEA;
+}
+
+.file-card a {
+  text-decoration: none;
+  color: #217346; /* Verde Excel */
+  font-weight: bold;
+}
+
+.file-card a:hover {
+  text-decoration: underline;
 }

@@ -21,10 +21,10 @@ export class Folder extends BaseEntity {
     @Column({ default: false })
     isRootFolder: boolean;
 
-    @ManyToOne(() => Folder, (folder) => folder.childFolders)
+    @ManyToOne(() => Folder, (folder) => folder.childFolders,  {cascade: true, onDelete: "CASCADE" })
     parentFolder: Folder;
 
-    @ManyToOne(() => User, (user) => {user.folders})
+    @ManyToOne(() => User, (user) => {user.folders} , {cascade: true, onDelete: "CASCADE" })
     owner: User;
     
     @CreateDateColumn()
@@ -41,10 +41,10 @@ export class Folder extends BaseEntity {
     @Column({nullable: true})
     path: string;
     
-    @OneToMany(() => Folder, (folder) => folder.parentFolder, {cascade: true})
+    @OneToMany(() => Folder, (folder) => folder.parentFolder)
     childFolders: Folder[];
 
-    @OneToMany(() => Document, (document) => document.folder, {cascade: true})
+    @OneToMany(() => Document, (document) => document.folder, {cascade: true, onDelete: "CASCADE"})
     documents: Document[];
 }
 
@@ -54,14 +54,13 @@ export class FolderOutput {
     level: number;
     isRootFolder: boolean;
     parentFolderId: number;
-    ownerId: number;
+    owner: User;
     path: string;
     createdDate: Date;
     updatedDate: Date;
     isActived: boolean;
 
     constructor (folder: Folder) {
-        console.log(this.parentFolderId)
         this.id = folder.id;
         this.name = folder.name;
         this.level = folder.level;
@@ -70,7 +69,7 @@ export class FolderOutput {
             this.parentFolderId = folder.parentFolder.id;
         };
         this.path = folder.path;
-        this.ownerId = folder.owner.id;
+        this.owner = folder.owner;
         this.createdDate = folder.createdDate;
         this.updatedDate = folder.updatedDate;
         this.isActived = folder.isActived;

@@ -1,7 +1,7 @@
 {
-  "name": "filesservice",
-  "version": "0.0.1",
-  "description": "Service to upload files into Gov Carpeta",
+  "name": "userservice",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",

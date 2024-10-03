@@ -1,30 +1,52 @@
-
+import React, { useState } from 'react';
+import FileUploader from './components/FileUploader/FileUploader';
+import FileList from './components/FileList/FileList';
 import './App.css';
-import MainTable from './components/table/MainTable';
-import SearchBar from './components/searchBar/SearchBar';
-import { Box, Grid2, List, ListItem } from '@mui/material';
+import { UploadedFile } from './Services/fileService';
 
-function App() {
+const App: React.FC = () => {
+
+  // const folderContent = fetch()
+  const [folderItem, setFolderContent] = useState<UploadedFile[]>([]);
+
+  const handleFileUpload = (newFile: UploadedFile) => {
+    setFolderContent([...folderItem, newFile]);
+  };
+
   return (
-    <div className="App">
-      <Grid2 size={12}>
-        <Box>
-          <SearchBar></SearchBar>
-        </Box>
-         </Grid2>
-      <Grid2 container spacing={2}>
-      <Grid2 size={4}>
-        <Box sx={{ flexGrow: 1 }} padding={'50px'}>
-        </Box>
-      </Grid2>
-      <Grid2 size={8}>
-        <Box sx={{ flexGrow: 1 }} padding={'50px'}>
-          <MainTable></MainTable>
-        </Box>
-      </Grid2>
-      </Grid2>
+    <div className="container">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <h2>My Drive</h2>
+        <ul>
+          <li>Files</li>
+          <li>Shared with me</li>
+          <li>Recent</li>
+          <li>Trash</li>
+        </ul>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Header */}
+        <div className="header">
+          <h1>React File System</h1>
+          <FileUploader onUpload={handleFileUpload} />
+        </div>
+
+      {/* File List */}
+        <div className="file-grid">
+          {folderItem.map((file, index) => (
+            <div key={index} className="file-card">
+              <a href={file.url} target="_blank" rel="noopener noreferrer">
+                {file.name}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;

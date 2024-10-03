@@ -2,6 +2,10 @@ import express from 'express';
 import morgan from 'morgan';
 import routerFolder from './routes/folder.routes';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const app = express();
 

@@ -89,6 +89,22 @@ export const deleteFolder = async (req: Request, res: Response) => {
     }
 }
 
+export const deleteFoldersRelatedToUser = async (req: Request, res: Response) => {
+    try {
+        const userId = parseInt(req.params.userid);
+        const wasFoldersDeleted = await folderService.deleteFoldersRelatedToUser(userId);
+        if (wasFoldersDeleted) return res.status(200).send({
+            message: 'folders Was deleted successfully'
+        })
+        return res.status(400).send({
+            message: 'it was not possible to delete folders for user'
+        })
+    } catch (error) {
+        return res.status(500).send({
+            message: 'it was not possible to delete folders for user'
+        })
+    }
+}
 export const getFolderMetaDataById = async (req: Request, res: Response) => {
     try {
         const folderId = parseInt(req.params.folderid);

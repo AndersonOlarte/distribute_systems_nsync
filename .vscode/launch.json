@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Attach by process",
-            "port": 3000,
+            "port": 3002,
             "processId": "${command:PickProcess}",
             "request": "attach",
             "skipFiles": [

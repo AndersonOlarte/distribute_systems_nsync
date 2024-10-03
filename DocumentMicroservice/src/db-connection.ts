@@ -2,14 +2,16 @@ import { DataSource } from "typeorm";
 import { User } from "./entities/User.entity";
 import { Folder } from "./entities/Folder.entity";
 import { Document } from "./entities/Document.entity";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const AppDataSource = new DataSource({
     type: 'postgres',
-    database: 'govcarpeta',
-    host: 'ec2-34-229-95-132.compute-1.amazonaws.com',
-    username: 'anderson',
-    password: 'anderson',
-    port: 5432,
+    database: process.env.DATABASE_NAME,
+    host: process.env.DATABASE_HOST,
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    port: parseInt(process.env.DATABASE_PORT !== undefined ? process.env.DATABASE_PORT: '5432') ,
     entities: [User, Folder, Document],
     logging: true,
     synchronize: false
@@ -22,3 +24,4 @@ export async function startConnetionWithDb() {
 }
 
 export const documentRepository = AppDataSource.getRepository(Document);
+export const userRepository = AppDataSource.getRepository(User);

@@ -45,4 +45,5 @@ export interface UserInput {
     name: string;
     age?: number;
     email: string;
+    govCarpetaId: string;
 }

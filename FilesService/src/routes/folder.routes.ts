@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { createFolder, createRootFolder, deleteFolder, getChildFolders, getFolderContent, getFolderMetaDataById } from "../controllers/folder.controller";
+import { createFolder, createRootFolder, deleteFolder, deleteFoldersRelatedToUser, getChildFolders, getFolderContent, getFolderMetaDataById } from "../controllers/folder.controller";
 
 const routerFolder = Router();
 
 routerFolder.post('/v1/users/:userid/folders', createFolder);
 
 routerFolder.delete('/v1/users/:userid/folders/:folderid', deleteFolder);
+
+routerFolder.delete('/v1/users/:userid/folders/', deleteFoldersRelatedToUser);
 
 routerFolder.post('/v1/users/:userid/folders/root-folder', createRootFolder);
 

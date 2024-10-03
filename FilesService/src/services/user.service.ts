@@ -1,9 +1,6 @@
 import { userRepository } from "../db-connection";
 import { User } from "../entities/User.entity";
 
-
-
-
 export class UserService {
     getUserById (userId: number): Promise<User | null> {
         return new Promise(async (resolve, reject) => {

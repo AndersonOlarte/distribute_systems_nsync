@@ -1,5 +1,5 @@
 import multer, { Multer } from 'multer';
-import { s3UploadFile } from '../helpers/S3BucketHelper';
+import { s3DeleteFiles, s3UploadFile } from '../helpers/S3BucketHelper';
 import { Folder } from '../entities/Folder.entity';
 import { Document } from '../entities/Document.entity';
 import { documentRepository } from '../db-connection';
@@ -24,13 +24,15 @@ export class DocumentService {
         userid: number,
         folder: Folder)  {
             try {
+                console.log('folder data: ', folder);
                 const newDocument = new Document();
                 newDocument.filename = fileToUpload.originalname;
                 newDocument.isActived = true;
                 if (folder) {
                     newDocument.folder = folder;
-                    newDocument.url = encodeURI(`https://${process.env.BUCKET_NAME}.amazonaws.com/user1/${newDocument.filename}`);
-                } 
+                    newDocument.url = `${userid}${folder.path}/${newDocument.filename}`;
+                }
+                newDocument.owner = folder.owner;
 
                 await documentRepository.save(newDocument);
             } catch (error) {
@@ -81,5 +83,22 @@ export class DocumentService {
         }
     }
 
-
+    async DeleteUserDocumentsFromBucket(userId: number) {
+        try {
+            const docsToBeDeleted = await documentRepository.findBy(
+                {
+                    owner: {
+                        id: userId
+                    }
+                }
+            );
+            const keysToBeDeleted: string[] = [];
+            docsToBeDeleted.map((document) => {
+                keysToBeDeleted.push(document.url);
+            })
+            s3DeleteFiles(keysToBeDeleted);
+        } catch (error) {
+            console.error('there was an error deleting files', error);
+        }
+    }
 }
