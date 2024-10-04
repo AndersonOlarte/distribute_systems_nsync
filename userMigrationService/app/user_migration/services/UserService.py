@@ -10,3 +10,7 @@ class UserService:
 
         # Throw exception if not valid
         return True
+
+    @staticmethod
+    def create_user(user_id, user_name, user_email):
+        print(f"CIELOS; FUI A CREAR EL USUARIO {user_id}")

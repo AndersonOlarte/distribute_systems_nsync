@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from flask import Blueprint, request, jsonify
 
+from app.user_migration.exceptions.invalid_request_exception import InvalidRequestException
 from app.user_migration.processors.TransferCitizenConfirmPublisherProcessor import TransferCitizenConfirmPublisherProcessor
 from app.user_migration.processors.TransferCitizenPublisherProcessor import TransferCitizenPublisherProcessor
 
@@ -12,9 +13,10 @@ user_migration = Blueprint("user_migration", __name__)
 def transfer_citizen_publisher():
     try:
         return jsonify(TransferCitizenPublisherProcessor.process(request.json)), HTTPStatus.OK
+    except InvalidRequestException as e:
+        return jsonify(f"Cannot process request. Reason: {e}"), HTTPStatus.BAD_REQUEST
     except Exception as e:
-        return jsonify(
-            error=f"An error occurred while publishing transfer notification. {e}"), HTTPStatus.INTERNAL_SERVER_ERROR
+        return jsonify(error=f"An error occurred while publishing transfer notification. {e}"), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 @user_migration.route("/transferCitizenConfirm", methods=["POST"])
