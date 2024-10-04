@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: nsync
+spec:
+  selector:
+    app: postgres  # Etiqueta del pod de PostgreSQL
+  ports:
+    - protocol: TCP
+      port: 5432  # Puerto estándar de PostgreSQL
+      targetPort: 5432
+  type: LoadBalancer

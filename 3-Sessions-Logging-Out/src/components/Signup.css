@@ -1,0 +1,37 @@
+/* Contenedor principal del registro */
+.signup-container {
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+    max-width: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Imagen del registro */
+  .signup-image {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+    border-radius: 50%; /* Para hacerla circular */
+  }
+  
+  /* Botón para regresar al home */
+  .back-home-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #217346; /* Verde NSYNC */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Cambio de color al pasar el ratón sobre el botón */
+  .back-home-button:hover {
+    background-color: #1b5d3a;
+  }
+  

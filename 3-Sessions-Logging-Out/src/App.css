@@ -1,0 +1,71 @@
+/* Ajuste general del body */
+body {
+  background-color: #F3F3F3; /* Gris claro */
+  color: #333333; /* Gris oscuro */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background-color: #FFFFFF;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px; /* Reducido a 400px */
+  width: 100%;
+  text-align: center;
+}
+
+/* Título de la página */
+.container h1 {
+  color: #217346; /* Verde Excel */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Ajustes para el formulario */
+form {
+  border-top: 4px solid #217346;
+  padding-top: 20px;
+}
+
+/* Estilos de los labels */
+label {
+  display: block;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333333;
+}
+
+/* Estilos para los inputs */
+input {
+  width: 80%; /* Ocupar todo el ancho disponible */
+  padding: 10px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  border: 1px solid #DDDDDD;
+  border-radius: 5px;
+  background-color: #F3F3F3;
+  color: #333333;
+}
+
+/* Botón */
+button {
+  width: 80%;
+  padding: 12px;
+  background-color: #217346; /* Verde Excel */
+  color: #FFFFFF;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1b5d3a;
+}

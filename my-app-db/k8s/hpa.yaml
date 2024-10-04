@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: postgres-hpa
+  namespace: nsync
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: postgres-deployment
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80  # Escalará si el uso de CPU supera el 50%
