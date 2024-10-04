@@ -207,4 +207,25 @@ export class FolderService {
             return false;
         }
     }
+
+    async getRootFolderContent(userid: number): Promise<FolderContent[] | null> {
+        try {
+            const rootFolder = await folderRepository.findOneBy({
+                owner: {
+                    id: userid
+                },
+                isRootFolder: true
+            })
+            if (rootFolder) {
+                let folderContent: FolderContent[] | null;
+                folderContent = await this.getFolderContent(userid, rootFolder.id);
+                return folderContent;
+            }
+            console.log('there is not root folder for userid: ', userid);
+            return null;
+        } catch (error) {
+            console.error('there was an error trying to get root folder', error);
+            return null;
+        }
+    }
 }

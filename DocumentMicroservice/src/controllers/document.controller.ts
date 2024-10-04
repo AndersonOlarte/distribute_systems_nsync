@@ -20,12 +20,16 @@ export const uploadDocument = async (req: Request, res: Response) => {
             const folderResponse = await folderMicroservice.getfolderById(userid, folderid);
             if (folderResponse) {
                 if(folderResponse.statusCode === 200) {
+                    console.log(req.file);
                     if(req.file) {
                         await documentService.uploadFile(req.file, userid, folderResponse.folder);
                         return res.status(201).send({
                             message: 'File Uploaded succesfully',
                         });
                     }
+                    return res.status(400).send({
+                        message: 'There is not file in request'
+                    })
                 }
                 return res.status(404).send({
                     message: 'folder with ID: ' + folderid + 'was not found.'

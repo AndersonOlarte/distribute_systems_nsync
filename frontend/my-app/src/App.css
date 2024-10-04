@@ -81,11 +81,16 @@ body {
 
 .file-card {
   background-color: #F3F3F3; /* Gris claro */
-  padding: 15px;
+  padding: 15px 20px;
+  margin-right: 20px;
   border: 1px solid #DDDDDD;
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+
 }
 
 .file-card:hover {
@@ -97,7 +102,36 @@ body {
   color: #217346; /* Verde Excel */
   font-weight: bold;
 }
+.file-card span {
+  /* margin-left: 15px; */
+  font-size: 1.03em;
+  color: #575757;
+  font-weight: 550;
+  min-width: fit-content;
+}
 
 .file-card a:hover {
   text-decoration: underline;
+}
+
+
+.table-container {
+  padding: 20px 50px;
+}
+
+.folder-container {
+  display: flex;
+}
+
+.file-img {
+  margin-left: 20px;
+}
+
+.file-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.09em;
+  color: #575757;
+  font-weight: 550;
 }

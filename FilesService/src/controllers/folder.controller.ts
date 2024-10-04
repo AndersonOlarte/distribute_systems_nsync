@@ -48,6 +48,31 @@ export const createRootFolder = async (req: Request, res: Response) => {
     }
 }
 
+export const getRootFolder = async (req: Request, res: Response) => {
+    try {
+        const userId = parseInt(req.params.userid);
+        if (userId) {
+            const rootFolderContent = await folderService.getRootFolderContent(userId);
+            if (rootFolderContent) {
+                return res.status(200).send({
+                    message: 'Root folder content retrieved succesfully',
+                    folder: rootFolderContent
+                })
+            };
+            return res.status(400).send({
+                message: 'there is not root folder for user with id: ' + userId
+            });
+        }
+        return res.status(400).send({
+            message: 'there is not userid'
+        });
+    } catch (error) {
+        console.error('there was an error trying to get root folder. ', error);
+        return res.status(500).send({
+            message: 'error getting root folder'
+        })
+    }
+}
 export const getChildFolders = async (req: Request, res: Response) => {
     try {
         const folderId = parseInt(req.params?.folderid);

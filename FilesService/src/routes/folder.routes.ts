@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createFolder, createRootFolder, deleteFolder, deleteFoldersRelatedToUser, getChildFolders, getFolderContent, getFolderMetaDataById } from "../controllers/folder.controller";
+import { createFolder, createRootFolder, deleteFolder, deleteFoldersRelatedToUser, getChildFolders, getFolderContent, getFolderMetaDataById, getRootFolder } from "../controllers/folder.controller";
 
 const routerFolder = Router();
 
@@ -10,6 +10,8 @@ routerFolder.delete('/v1/users/:userid/folders/:folderid', deleteFolder);
 routerFolder.delete('/v1/users/:userid/folders/', deleteFoldersRelatedToUser);
 
 routerFolder.post('/v1/users/:userid/folders/root-folder', createRootFolder);
+
+routerFolder.get('/v1/users/:userid/folders/root-folder', getRootFolder);
 
 routerFolder.get('/v1/users/:userid/folders/:folderid/child-folders', getChildFolders);
 

@@ -1,10 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FileUploader from './components/FileUploader/FileUploader';
 import FileList from './components/FileList/FileList';
 import './App.css';
 import { UploadedFile } from './Services/fileService';
+import FolderContent from './components/FolderContent/FolderContent';
+import { IFolderContent } from './helpers/interfaces';
+import StickyHeadTable from './components/table/MainTable';
 
 const App: React.FC = () => {
+
+
+
+  const [userId, setUserId] = useState<string>();
+  const [folderId, setFolderId] = useState<number>();
+  const [folderContent, setCurrentFolderContent] = useState<IFolderContent[]>();
+
+  useEffect(() => {
+        localStorage.setItem('userid', '1');
+        const storedUser = '1';
+        if (storedUser) {
+          setUserId(storedUser);
+        }
+    const getRootFolderContent = async () => {
+      const response = await fetch(`http://localhost:3001/v1/users/${storedUser}/folders/root-folder`);
+      const responseJson = await response.json();
+      setCurrentFolderContent(responseJson.folder);
+    };
+
+    getRootFolderContent();
+  }, []);
+
+  
 
   // const folderContent = fetch()
   const [folderItem, setFolderContent] = useState<UploadedFile[]>([]);
@@ -36,14 +62,18 @@ const App: React.FC = () => {
 
       {/* File List */}
         <div className="file-grid">
-          {folderItem.map((file, index) => (
+          <FolderContent folderContent={folderContent}></FolderContent>
+          {/* {folderItem.map((file, index) => (
             <div key={index} className="file-card">
               <a href={file.url} target="_blank" rel="noopener noreferrer">
                 {file.name}
               </a>
             </div>
-          ))}
+          ))} */}
         </div>
+        <section className="table-container">
+          <StickyHeadTable folderContent={folderContent} ></StickyHeadTable>
+        </section>
       </div>
     </div>
   );
