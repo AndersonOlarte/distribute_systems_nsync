@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-migration-service
+  name: user-migration-citizen-consumer-service
   namespace: nsync
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-migration-service
+      app: user-migration-citizen-consumer-service
   template:
     metadata:
       labels:
-        app: user-migration-service
+        app: user-migration-citizen-consumer-service
     spec:
       containers:
-      - name: user-migration-container
-        image: juanda0/user-migration-service:1.1
+      - name: user-migration-citizen-consumer-container
+        image: juanda0/user-migration-citizen-consumer-service:1.0
         ports:
-        - containerPort: 8080
+        - containerPort: 5672
         env:
         - name: RABBITMQ_HOST
           valueFrom:
