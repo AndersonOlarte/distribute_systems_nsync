@@ -26,7 +26,7 @@ export class DocumentMicroservice {
     }
 
     async deleteDocumentsByUserId(userid: number): Promise<GetDocumentsByFolderId | null> {
-        const documentMicroserviceURL = `http://localhost:3000/v1/users/${userid}/delete-docs`
+        const documentMicroserviceURL = `${process.env.DOCUMENT_SERVICE_URL}:${process.env.DOCUMENT_SERVICE_PORT}/v1/users/${userid}/delete-docs`
         
         try {
             const documentMicroseriveReq  = await fetch(documentMicroserviceURL, {method: 'DELETE'});

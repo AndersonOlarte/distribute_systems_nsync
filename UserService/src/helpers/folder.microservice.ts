@@ -23,7 +23,7 @@ export class FolderMicroservice {
 
     async getFolderContent(folder: Folder) {
         try {
-            const folderMicroserviceURL = `http://localhost:3001/v1/users/${folder.owner.id}/folders/${folder.id}/content`;
+            const folderMicroserviceURL = `${process.env.FOLDER_SERVICE_URL}:${process.env.FOLDER_SERVICE_PORT}/v1/users/${folder.owner.id}/folders/${folder.id}/content`;
             const folderMicroserviceReq = await fetch(folderMicroserviceURL);
             const httpStatusCode = folderMicroserviceReq.status;
             if (httpStatusCode === 200) {
