@@ -4,7 +4,7 @@ metadata:
   name: rabbitmq-config
   namespace: nsync
 data:
-  RABBITMQ_HOST: "rabbitmq-hostname"
+  RABBITMQ_HOST: "rabbitmq-service"
   RABBITMQ_PORT: "5672"
   RABBITMQ_USER: "guest"
   RABBITMQ_PASSWORD: "guest"
