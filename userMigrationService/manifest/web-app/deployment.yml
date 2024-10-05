@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-migration-service
+  namespace: nsync
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-migration-service
+  template:
+    metadata:
+      labels:
+        app: user-migration-service
+    spec:
+      containers:
+      - name: user-migration-container
+        image: ubuntu
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-config
+              key: RABBITMQ_HOST
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-config
+              key: RABBITMQ_PORT
+        - name: RABBITMQ_USER
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-secrets
+              key: RABBITMQ_USER
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-secrets
+              key: RABBITMQ_PASSWORD

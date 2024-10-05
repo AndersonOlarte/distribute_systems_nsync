@@ -1,3 +1,6 @@
+from app.user_migration.exceptions.invalid_request_exception import InvalidRequestException
+
+
 class UserService:
 
     @staticmethod
@@ -7,8 +10,12 @@ class UserService:
     @staticmethod
     def validate_transfer_solicitude(user_id):
         print(f"CIELOS; FUI A VALIDAR QUE EL USUARIO {user_id} SOLICITARA TRANSFERENCIA")
-
-        # Throw exception if not valid
+        response = {}
+        data = response.json()
+        if not response.ok:
+            raise Exception(f"Failed request of validation for user {user_id}. Reason {response.json()}")
+        elif not data['transferConfirmation']:
+            raise InvalidRequestException("User didnt made a transfer solicitude")
         return True
 
     @staticmethod
