@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: user-migration-container
-        image: juanda0/user-migration-service:1.4
+        image: juanda0/user-migration-service:1.6
         ports:
         - containerPort: 8080
         env:
