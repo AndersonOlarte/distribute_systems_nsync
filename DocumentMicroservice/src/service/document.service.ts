@@ -108,7 +108,7 @@ export class DocumentService {
 
     async uploadFilesFromTransfer (documents: ITranferredDocs, userid: string) {
 
- const folder: Folder | null = (await this.folderMicroservice.getfolderById(userid,1))?.folder;
+    const folder: Folder | null = (await this.folderMicroservice.getfolderById(userid,1))?.folder;
 const downloadAndPost = async (url: string, filename: string) => {
     try {
         const response = await axios({
@@ -116,12 +116,12 @@ const downloadAndPost = async (url: string, filename: string) => {
             url: url,
             responseType: 'stream' // Para manejar el archivo como stream
         });
-        const fileToUpload = await this.streamToMulterFile(response.data, filename);
+        const fileToUpload = await streamToMulterFile(response.data, filename);
  
         // Crear un form-data para el archivo
         const form = new FormData();
         form.append('file', response.data);
-        form.append('filename', 'examplename');
+        form.append('filename', fileToUpload.originalname);
  
         if (folder) {
             const createDocumentResponse = this.uploadFile(fileToUpload, userid, folder);
@@ -140,10 +140,6 @@ const downloadAndPost = async (url: string, filename: string) => {
         documents.documents.map((docUrl, index) => {
             promises.push(downloadAndPost(Object.values(docUrl)[0], Object.keys(docUrl)[0]));
         })
-        // documents.forEach(docUrl => {
-        // });
-    
-        // Ejecutar todas las promesas en paralelo
         await Promise.all(promises);
     
         console.log('All documents processed in parallel');
@@ -151,31 +147,33 @@ const downloadAndPost = async (url: string, filename: string) => {
     };
     
     postDocumentsInParallel();
+
+    const streamToMulterFile = async (stream: Readable, filename: string): Promise<Express.Multer.File> => {
+        const chunks: Uint8Array[] = [];
+        return new Promise((resolve, reject) => {
+          stream.on('data', (chunk) => chunks.push(chunk));
+          stream.on('end', () => {
+            const buffer = Buffer.concat(chunks);
+            const file: Express.Multer.File = {
+              fieldname: 'file',  // Nombre del campo del archivo
+              originalname: filename,  // Nombre original del archivo
+              encoding: '7bit', // Encoding común, puede variar
+              mimetype: 'application/pdf', // Cambia esto según el tipo de archivo
+              size: buffer.length,
+              buffer: buffer,  // El contenido del archivo en buffer
+              stream: Readable.from(buffer),
+              destination: '', // Solo se utiliza cuando es almacenamiento en disco
+              filename: '', // Si se guarda en disco
+              path: '' // Solo si se guarda en disco
+            };
+            resolve(file);
+          });
+          stream.on('error', reject);
+        });
+      };
         }
 
         
-        streamToMulterFile = async (stream: Readable, filename: string): Promise<Express.Multer.File> => {
-            const chunks: Uint8Array[] = [];
-            return new Promise((resolve, reject) => {
-              stream.on('data', (chunk) => chunks.push(chunk));
-              stream.on('end', () => {
-                const buffer = Buffer.concat(chunks);
-                const file: Express.Multer.File = {
-                  fieldname: 'file',  // Nombre del campo del archivo
-                  originalname: filename,  // Nombre original del archivo
-                  encoding: '7bit', // Encoding común, puede variar
-                  mimetype: 'application/pdf', // Cambia esto según el tipo de archivo
-                  size: buffer.length,
-                  buffer: buffer,  // El contenido del archivo en buffer
-                  stream: Readable.from(buffer),
-                  destination: '', // Solo se utiliza cuando es almacenamiento en disco
-                  filename: '', // Si se guarda en disco
-                  path: '' // Solo si se guarda en disco
-                };
-                resolve(file);
-              });
-              stream.on('error', reject);
-            });
-          };
+      
 }
 
