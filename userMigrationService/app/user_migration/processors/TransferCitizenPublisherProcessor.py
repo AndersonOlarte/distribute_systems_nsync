@@ -6,5 +6,5 @@ class TransferCitizenPublisherProcessor:
     @staticmethod
     def process(message):
         CentralizerService.validate_user_not_registered(message['id'])
-        QueueService.publish_message(message, "TRANSFER_CITIZEN")
+        QueueService.publish_message(message, "TRANSFER_CITIZEN", "user_migration_exchange")
         return "User transaction received successfully"

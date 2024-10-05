@@ -6,11 +6,12 @@ RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
 RABBITMQ_PORT = int(os.getenv('RABBITMQ_PORT', 5672))
 RABBITMQ_USER = os.getenv('RABBITMQ_USER', 'guest')
 RABBITMQ_PASSWORD = os.getenv('RABBITMQ_PASSWORD', 'guest')
-EXCHANGE = "user_migration_exchange"
 
 credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
 parameters = pika.ConnectionParameters(host=RABBITMQ_HOST, port=RABBITMQ_PORT, credentials=credentials)
-routing_keys_by_operation = {"TRANSFER_CITIZEN": "transferCitizen_queue", "CONFIRM_TRANSFER": "confirmCitizen_queue"}
+routing_keys_by_operation = {"TRANSFER_CITIZEN": "transferCitizen_queue",
+                             "CONFIRM_TRANSFER": "confirmCitizen_queue",
+                             "NOTIFICATE_USER": "notification.nsync"}
 
 
 class QueueService:
@@ -20,12 +21,12 @@ class QueueService:
         return pika.BlockingConnection(parameters)
 
     @staticmethod
-    def publish_message(message, operation):
+    def publish_message(message, operation, exchange):
         connection = QueueService.get_connection()
         channel = connection.channel()
 
         channel.basic_publish(
-            exchange=EXCHANGE,
+            exchange=exchange,
             routing_key=routing_keys_by_operation[operation],
             body=json.dumps(message),
             properties=pika.BasicProperties(

@@ -1,12 +1,14 @@
+from app.user_migration.services.QueueService import QueueService
+
+
 class NotificationService:
 
     @staticmethod
-    def send_notification(user_id, action, timestamp):
-        #ADD PROPER REQUEST response = requests.post(operator_confirmation_url, json=user_id_json)
-        print(f"CIELOS; FUI A NOTIFICAR {user_id}")
-        return
-        print(f"Finished sending notification for user {user_id} with status code {response.status_code}")
-        print(response.json())
-        if not response.ok:
-            raise Exception(f"Failed sending notification for user {user_id}. Reason {response.json()}")
+    def send_notification(user_id, action):
+        notification = NotificationService.build_message(user_id, action)
+        QueueService.publish_message(notification, "NOTIFICATE_USER", "notifications")
+        print(f"Finished sending notification for user {user_id}")
 
+    @staticmethod
+    def build_message(user_id, action):
+        return {"data": {"userId": user_id, "eventType": action}}
