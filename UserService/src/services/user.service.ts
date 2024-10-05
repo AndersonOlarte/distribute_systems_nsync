@@ -149,4 +149,14 @@ export class UserService {
 //         console.log('there was not user with id: ', userid);
 //         return false;
 //     }
+
+    async getUserById (userid: string): Promise<User | null> {
+        const user = await userRepository.findOneByOrFail({
+            id: userid
+        })
+        if (user) {
+            return user;
+        }
+        return null;
+    }
 }

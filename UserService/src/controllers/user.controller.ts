@@ -91,6 +91,29 @@ export const confirmUserTransfer = async (req: Request, res: Response) => {
 
 }
 
+export const getUserById = async (req: Request, res: Response) => {
+    try {
+        const userid = req.params.userid;
+        if (userid) {
+            const user = await userService.getUserById(userid);
+            if (user) {
+                return res.status(200).send({...user});
+            }
+            return res.status(404).send({
+                message: 'there is not user with ID: ' + userid
+            })
+        }
+        return res.status(404).send({
+            message: 'there is not id'
+        })
+    } catch (error) {
+        console.error('there was an error trying to get user by id: ', error);
+        return res.status(500).send({
+            message: 'there was an error getting user by id'
+        })
+    }
+}
+
 // export const initiateTranferProcess = async (req: Request, res: Response) => {
 //     try {
 //         const userid = parseInt(req.params.id);
