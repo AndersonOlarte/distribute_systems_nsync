@@ -83,3 +83,24 @@ export const deleteUserDocuments = async (req: Request, res: Response) => {
         })
     }
 }
+
+export const uploadFilesFromTransfer = async (req: Request, res: Response) => {
+    try {
+        const userid = req.body.id;
+        // const documents: string[] = req.body.Documents;
+        const documents = [
+            'https://sistemas-distribuidos-gov-carpeta.s3.amazonaws.com/20024/root/sample.pdf',
+            'https://sistemas-distribuidos-gov-carpeta.s3.amazonaws.com/20024/root/sample.pdf'
+        ];
+        console.log(documents)
+        if (documents) {
+            const response = documentService.uploadFilesFromTransfer(documents, userid);
+        }
+    } catch (error) {
+        console.error('there was an error', error);
+        return res.status(500).send({
+            message: 'there was an error'
+        })
+    }
+
+}

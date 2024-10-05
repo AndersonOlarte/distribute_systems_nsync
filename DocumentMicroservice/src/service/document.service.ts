@@ -4,6 +4,9 @@ import { Folder } from '../entities/Folder.entity';
 import { Document } from '../entities/Document.entity';
 import { documentRepository } from '../db-connection';
 import { FolderMicroservice } from '../mockServices/FolderMicroservice';
+import axios from 'axios';
+import FormData from 'form-data';
+
 
 export class DocumentService {
 
@@ -65,7 +68,6 @@ export class DocumentService {
     }
 
     async getDocumentsByFolder(folder: Folder): Promise<Document[] | null> {
-        console.log(folder);
         try {
             return await documentRepository.find({
                 relations: {
@@ -103,19 +105,13 @@ export class DocumentService {
         }
     }
 
-    async uploadFilesFromTransfer () {
-        const axios = require('axios');
-const FormData = require('form-data');
- 
-const documents = {
-    "Documents": {
-        "Document1": ["http://example.com/documentFile1"],
-        "Document2": ["http://example.com/documentFile2"]
-    }
-};
- 
+    async uploadFilesFromTransfer (documents: string[], userid: string) {
+        console.log(documents);
+// const FormData = require('form-data');
+// const axios = require('axios');
+ const folder: Folder | null = (await this.folderMicroservice.getfolderById(parseInt(userid),1))?.folder;
 // Función para descargar y realizar el POST
-const downloadAndPost = async (url, postEndpoint) => {
+const downloadAndPost = async (url: string) => {
     try {
         const response = await axios({
             method: 'get',
@@ -125,32 +121,30 @@ const downloadAndPost = async (url, postEndpoint) => {
  
         // Crear un form-data para el archivo
         const form = new FormData();
+        console.log(response.data);
         form.append('file', response.data);
  
         // Realizar el POST request al endpoint con el archivo descargado
-        const postResponse = await axios.post(postEndpoint, form, {
-            headers: form.getHeaders() // Es importante para enviar los headers correctos
-        });
- 
-        console.log(`Post response for ${url}:`, postResponse.data);
+        if (folder) {
+            const postResponse = await form.submit(`${process.env.DOCUMENT_SERVICE_URL}:3000/v1/users/:userid/folders/:folderid/document`)
+        }
     } catch (error) {
         console.error(`Error downloading or posting document from ${url}:`, error);
     }
 };
  
 // Endpoint al que se enviarán los documentos
-const postEndpoint = 'http://your-api-endpoint.com/upload';
  
     // Descargar y hacer POST de cada documento en paralelo
     const postDocumentsInParallel = async () => {
-        const promises = [];
+        const promises: Promise<any>[]=[];
     
         // Crear promesas para cada documento
-        Object.values(documents.Documents).forEach(docArray => {
-            docArray.forEach(docUrl => {
-                promises.push(downloadAndPost(docUrl, postEndpoint));
-            });
-        });
+        documents.map((docUrl) => {
+            promises.push(downloadAndPost(docUrl));
+        })
+        // documents.forEach(docUrl => {
+        // });
     
         // Ejecutar todas las promesas en paralelo
         await Promise.all(promises);

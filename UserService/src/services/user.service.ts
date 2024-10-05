@@ -51,6 +51,7 @@ export class UserService {
         }
     }
     async tranferUserDocuments(userid:number, transferURL: string): Promise<boolean | null> {
+
         try {
             const user = await userRepository.findOne(
                 {
@@ -87,6 +88,7 @@ export class UserService {
                     })
                 })
                 if(govCarpetaResponse.ok) {
+                    console.log('transfer body', transferDocsBody);
                     fetch(transferURL, {
                         method: 'POST',
                         body: JSON.stringify(transferDocsBody)
