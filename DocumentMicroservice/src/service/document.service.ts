@@ -6,6 +6,9 @@ import { documentRepository } from '../db-connection';
 import { FolderMicroservice } from '../mockServices/FolderMicroservice';
 import axios from 'axios';
 import FormData from 'form-data';
+import { Readable } from 'stream'; // Importar Readable desde el módulo correcto
+import { ITranferredDocs } from '../helpers/FolderMicroservices.types';
+
 
 
 export class DocumentService {
@@ -105,28 +108,25 @@ export class DocumentService {
         }
     }
 
-    async uploadFilesFromTransfer (documents: string[], userid: string) {
-        console.log(documents);
-// const FormData = require('form-data');
-// const axios = require('axios');
+    async uploadFilesFromTransfer (documents: ITranferredDocs, userid: string) {
+
  const folder: Folder | null = (await this.folderMicroservice.getfolderById(parseInt(userid),1))?.folder;
-// Función para descargar y realizar el POST
-const downloadAndPost = async (url: string) => {
+const downloadAndPost = async (url: string, filename: string) => {
     try {
         const response = await axios({
             method: 'get',
             url: url,
             responseType: 'stream' // Para manejar el archivo como stream
         });
+        const fileToUpload = await this.streamToMulterFile(response.data, filename);
  
         // Crear un form-data para el archivo
         const form = new FormData();
-        console.log(response.data);
         form.append('file', response.data);
+        form.append('filename', 'examplename');
  
-        // Realizar el POST request al endpoint con el archivo descargado
         if (folder) {
-            const postResponse = await form.submit(`${process.env.DOCUMENT_SERVICE_URL}:3000/v1/users/:userid/folders/:folderid/document`)
+            const createDocumentResponse = this.uploadFile(fileToUpload, parseInt(userid), folder);
         }
     } catch (error) {
         console.error(`Error downloading or posting document from ${url}:`, error);
@@ -138,10 +138,9 @@ const downloadAndPost = async (url: string) => {
     // Descargar y hacer POST de cada documento en paralelo
     const postDocumentsInParallel = async () => {
         const promises: Promise<any>[]=[];
-    
         // Crear promesas para cada documento
-        documents.map((docUrl) => {
-            promises.push(downloadAndPost(docUrl));
+        documents.documents.map((docUrl, index) => {
+            promises.push(downloadAndPost(Object.values(docUrl)[0], Object.keys(docUrl)[0]));
         })
         // documents.forEach(docUrl => {
         // });
@@ -150,8 +149,35 @@ const downloadAndPost = async (url: string) => {
         await Promise.all(promises);
     
         console.log('All documents processed in parallel');
+        return true;
     };
     
     postDocumentsInParallel();
         }
+
+        
+        streamToMulterFile = async (stream: Readable, filename: string): Promise<Express.Multer.File> => {
+            const chunks: Uint8Array[] = [];
+            return new Promise((resolve, reject) => {
+              stream.on('data', (chunk) => chunks.push(chunk));
+              stream.on('end', () => {
+                const buffer = Buffer.concat(chunks);
+                const file: Express.Multer.File = {
+                  fieldname: 'file',  // Nombre del campo del archivo
+                  originalname: filename,  // Nombre original del archivo
+                  encoding: '7bit', // Encoding común, puede variar
+                  mimetype: 'application/pdf', // Cambia esto según el tipo de archivo
+                  size: buffer.length,
+                  buffer: buffer,  // El contenido del archivo en buffer
+                  stream: Readable.from(buffer),
+                  destination: '', // Solo se utiliza cuando es almacenamiento en disco
+                  filename: '', // Si se guarda en disco
+                  path: '' // Solo si se guarda en disco
+                };
+                resolve(file);
+              });
+              stream.on('error', reject);
+            });
+          };
 }
+

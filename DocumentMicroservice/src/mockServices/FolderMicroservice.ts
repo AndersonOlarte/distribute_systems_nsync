@@ -16,7 +16,6 @@ export class FolderMicroservice {
 
     async getfolderById(userid: number, folderid: number) {
         const folderMicroserviceURL = `${process.env.FOLDER_SERVICE_URL}:${process.env.FOLDER_SERVICE_PORT}/v1/users/${userid}/folders/${folderid}`
-        console.log(folderMicroserviceURL);
         try {
             const folderMicroserviceReq = await fetch(folderMicroserviceURL);
             const httpStatusCode = folderMicroserviceReq.status;
