@@ -2,7 +2,7 @@ import requests
 import logging
 logging.basicConfig(level=logging.INFO)
 
-BASE_DOCUMENT_URL = ""
+BASE_DOCUMENT_URL = "https://a1d7b2052bfbf4f0a9091668e9a10ec4-410648471.us-east-1.elb.amazonaws.com:3000"
 
 
 class DocumentService:
