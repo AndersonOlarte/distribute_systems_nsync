@@ -8,7 +8,7 @@ import { PutObjectCommand,
 import { Folder } from "../entities/Folder.entity";
 
 
-export async function s3UploadFile(fileToUpload: Express.Multer.File, userid: number, folder: Folder) {
+export async function s3UploadFile(fileToUpload: Express.Multer.File, userid: string, folder: Folder) {
 try {
     const s3Client = new S3Client({
         region: process.env.AWS_REGION,
@@ -22,7 +22,7 @@ try {
         Body: fileToUpload.buffer,
         Key: `${userid}${folder.path}/${fileToUpload.originalname}`,
     };
-    const s3Rresponse = await s3Client.send(new PutObjectCommand(putObjectCommandInput));
+    const s3Rresponse = await s3Client.send(new PutObjectCommand(putObjectCommandInput))
     
     return s3Rresponse.$metadata.httpStatusCode;
 } catch (error) {

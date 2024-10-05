@@ -27,10 +27,9 @@ export class DocumentService {
 
     private async uploadDocumentToDb(
         fileToUpload:Express.Multer.File,
-        userid: number,
+        userid: string,
         folder: Folder)  {
             try {
-                console.log('folder data: ', folder);
                 const newDocument = new Document();
                 newDocument.filename = fileToUpload.originalname;
                 newDocument.isActived = true;
@@ -46,7 +45,7 @@ export class DocumentService {
             }
     }
 
-    private async uploadDocumentToS3(fileToUpload: Express.Multer.File, userid: number, folder: Folder) {
+    private async uploadDocumentToS3(fileToUpload: Express.Multer.File, userid: string, folder: Folder) {
         try {
             const s3ResponseStatusCode = await s3UploadFile(fileToUpload, userid, folder);
             if (s3ResponseStatusCode === 201 || s3ResponseStatusCode === 200) {
@@ -60,9 +59,8 @@ export class DocumentService {
 
 
 
-    async uploadFile(fileToUpload: Express.Multer.File,userid: number, folder: Folder) {
+    async uploadFile(fileToUpload: Express.Multer.File,userid: string, folder: Folder) {
         try {
-            console.log('testing');
             await this.uploadDocumentToS3(fileToUpload, userid, folder);
             await this.uploadDocumentToDb(fileToUpload,userid, folder);
         } catch (error) {
@@ -110,7 +108,7 @@ export class DocumentService {
 
     async uploadFilesFromTransfer (documents: ITranferredDocs, userid: string) {
 
- const folder: Folder | null = (await this.folderMicroservice.getfolderById(parseInt(userid),1))?.folder;
+ const folder: Folder | null = (await this.folderMicroservice.getfolderById(userid,1))?.folder;
 const downloadAndPost = async (url: string, filename: string) => {
     try {
         const response = await axios({
@@ -126,7 +124,7 @@ const downloadAndPost = async (url: string, filename: string) => {
         form.append('filename', 'examplename');
  
         if (folder) {
-            const createDocumentResponse = this.uploadFile(fileToUpload, parseInt(userid), folder);
+            const createDocumentResponse = this.uploadFile(fileToUpload, userid, folder);
         }
     } catch (error) {
         console.error(`Error downloading or posting document from ${url}:`, error);
