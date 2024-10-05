@@ -4,7 +4,8 @@ import sys
 import pika
 from app.user_migration.processors.TransferCitizenConfirmConsumerProcessor import TransferCitizenConfirmConsumerProcessor
 from app.user_migration.services.QueueService import QueueService
-
+import logging
+logging.basicConfig(level=logging.INFO)
 EXCHANGE = os.getenv("EXCHANGE_NAME", "user_migration_exchange")
 QUEUE_NAME = 'confirmCitizen_queue'
 RETRY_QUEUE_NAME = 'confirmCitizen_retry_queue'
@@ -26,7 +27,7 @@ def callback(ch, method, properties, body):
         # Acknowledge el mensaje después de procesarlo exitosamente
         ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
-        print(f"Error processing message: {e}", file=sys.stderr)
+        logging.error("Ocurrió un error: %s", e)
 
         # Obtener el contador de reintentos desde los headers
         headers = properties.headers or {}
