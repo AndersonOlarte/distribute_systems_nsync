@@ -23,19 +23,17 @@ class CentralizerService:
         logging.info(f"CENTRALIZER SERVICE REQUEST: {citizen_data}")
         response = requests.post('https://govcarpeta-apis-83e1c996379d.herokuapp.com/apis/registerCitizen', json=citizen_data)
         logging.info(f"Finished registration in govcarpeta for user {user_id} with status code {response.status_code}")
-        logging.info(f"CENTRALIZER SERVICE RESPONSE: {response.json()}")
         if not response.ok:
-            raise Exception(f"Failed request of confirmation for user {user_id}. Reason {response.json()}")
+            raise Exception(f"Failed request of confirmation for user {user_id}.")
 
     @staticmethod
     def validate_user_not_registered(user_id):
         logging.info(f"VALIDATE USER IN GOVCARPETA: {user_id}")
         response = requests.get(f'https://govcarpeta-apis-83e1c996379d.herokuapp.com/apis/validateCitizen/{user_id}')
         logging.info(f"Finished validation of user in govcarpeta. UserId {user_id} responded with status code {response.status_code}")
-        logging.info(f"VALIDATE USER IN GOVCARPETA RESPONSE: {response.json()}")
         if response.status_code == 200:
             raise InvalidRequestException("user still registered in govCarpeta")
         elif response.status_code == 204:
             return
         else:
-            raise Exception(f"Failed request of confirmation for user {user_id}. Reason {response.json()}")
+            raise Exception(f"Failed request of confirmation for user {user_id}")

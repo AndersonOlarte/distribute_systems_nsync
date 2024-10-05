@@ -20,6 +20,7 @@ EXPOSE 8080
 
 # Comando por defecto para ejecutar la aplicación
 CMD ["poetry", "run", "python", "-m", "app.user_migration.consumer.TransferCitizenConsumer"]
-#docker build -t user-migration-citizen-consumer-service:1.2 -f Dockerfiles/transfer-citizen-consumer/Dockerfile .
-#docker tag user-migration-citizen-consumer-service:1.2 juanda0/user-migration-citizen-consumer-service:1.2
-#docker push juanda0/user-migration-citizen-consumer-service:1.2
+#docker build -t user-migration-citizen-consumer-service:1.3 -f Dockerfiles/transfer-citizen-consumer/Dockerfile .
+#docker tag user-migration-citizen-consumer-service:1.3 juanda0/user-migration-citizen-consumer-service:1.3
+#docker push juanda0/user-migration-citizen-consumer-service:1.3
+#kubectl apply -f manifest/transfer-citizen-consumer/

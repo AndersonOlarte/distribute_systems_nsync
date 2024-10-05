@@ -20,6 +20,7 @@ EXPOSE 8080
 
 # Comando por defecto para ejecutar la aplicación
 CMD ["poetry", "run", "python", "-m", "app"]
-#docker build -t user-migration-service:1.3 -f Dockerfiles/web-app/Dockerfile .
-#docker tag user-migration-service:1.3 juanda0/user-migration-service:1.3
-#docker push juanda0/user-migration-service:1.3
+#docker build -t user-migration-service:1.4 -f Dockerfiles/web-app/Dockerfile .
+#docker tag user-migration-service:1.4 juanda0/user-migration-service:1.4
+#docker push juanda0/user-migration-service:1.4
+#kubectl apply -f manifest/web-app/

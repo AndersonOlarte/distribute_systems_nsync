@@ -11,6 +11,5 @@ class OperatorService:
         logging.info(f"CONFIRM USER TRANSACTION: {user_id_json}")
         response = requests.post(operator_confirmation_url, json=user_id_json)
         logging.info(f"Finished confirmation of transaction for user {user_id} with status code {response.status_code}")
-        logging.info(f"CONFIRM USER TRANSACTION: {response.json()}")
         if not response.ok:
             raise Exception(f"Failed request of confirmation for user {user_id}. Reason {response.json()}")
