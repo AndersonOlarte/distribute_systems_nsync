@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: user-migration-container
-        image: ubuntu
+        image: juanda0/user-migration-service:1.0
         ports:
         - containerPort: 8080
         env:
@@ -32,10 +32,10 @@ spec:
         - name: RABBITMQ_USER
           valueFrom:
             configMapKeyRef:
-              name: rabbitmq-secrets
+              name: rabbitmq-config
               key: RABBITMQ_USER
         - name: RABBITMQ_PASSWORD
           valueFrom:
             configMapKeyRef:
-              name: rabbitmq-secrets
+              name: rabbitmq-config
               key: RABBITMQ_PASSWORD
