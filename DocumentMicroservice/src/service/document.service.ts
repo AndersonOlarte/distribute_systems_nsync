@@ -88,7 +88,7 @@ export class DocumentService {
             const docsToBeDeleted = await documentRepository.findBy(
                 {
                     owner: {
-                        id: userId
+                        id: userId.toString()
                     }
                 }
             );

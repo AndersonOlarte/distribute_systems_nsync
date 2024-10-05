@@ -1,11 +1,14 @@
 import fetch from "node-fetch";
 import { Folder } from "../entities/Folder.entity";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 export class FolderMicroservice {
     async createRootFolder(userId: number): Promise<boolean> {
         try {
-            const folderMicroserviceURL = `${process.env.FOLDER_SERVICE_URL}/v1/users/${userId}/folders/root-folder`;
+            const folderMicroserviceURL = `${process.env.FOLDER_SERVICE_URL}:${process.env.FOLDER_SERVICE_PORT}/v1/users/${userId}/folders/root-folder`;
+            console.log(folderMicroserviceURL);
             const folderMicroserviceReq = await fetch(folderMicroserviceURL,{
                 method: 'POST',
             });

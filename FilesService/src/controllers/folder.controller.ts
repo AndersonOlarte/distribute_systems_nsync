@@ -10,11 +10,16 @@ export const createFolder = async (req: Request, res: Response) => {
         const folderName: string = req.body?.name;
         const parentFolderId: number = parseInt(req.body?.parentFolderId);
         const newFolder = await folderService.createNewFolder(folderName, parentFolderId);
-        const folderOutput = new FolderOutput(newFolder);
-        res.status(201).send({
-            message: 'folder created successfully',
-            folder: folderOutput
-        });
+        if(newFolder) {
+            const folderOutput = new FolderOutput(newFolder);
+            return res.status(201).send({
+                message: 'folder created successfully',
+                folder: folderOutput
+            });
+        }
+        return res.status(400).send({
+            message: 'there was inssue creating new folder'
+        })
     } catch (error) {
         if (error instanceof Error) {
             console.error(error);

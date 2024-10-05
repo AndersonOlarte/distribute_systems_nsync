@@ -21,15 +21,17 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onUpload }) => {
 
   const handleUpload = async () => {
     if (file) {
-      const uploadedFile = await uploadFile(file);
-      onUpload(uploadedFile);
+
+
+      // const uploadedFile = await uploadFile(file);
+      // onUpload(uploadedFile);
     }
   };
 
   return (
     <div>
       <h2>Upload a file</h2>
-      <form action="http://localhost:3000/v1/users/1/folders/1/document" method="post" encType="multipart/form-data">
+      <form action="http://localhost:3000/v1/users/23423/folders/2/document" method="post" encType="multipart/form-data">
         <input type="file" name="newFile"onChange={handleFileChange}/>
         <button type="submit" className="button" onClick={handleUpload}>Upload file</button>
     </form>

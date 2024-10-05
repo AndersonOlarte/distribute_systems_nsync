@@ -5,11 +5,13 @@ export interface UploadedFile {
   url: string;
 }
 
-export const uploadFile = async (file: File): Promise<UploadedFile> => {
-//   const storageRef = storage.ref();
-//   const fileRef = storageRef.child(file.name);
-//   await fileRef.put(file);
-//   const url = await fileRef.getDownloadURL();
-const url = 'url'
+export const uploadFile = async (file: File, userId: string, folderid: number): Promise<UploadedFile> => {
+  const url = `http://localhost:3000/v1/users/${userId}/folders/${folderid}/document`
+  console.log(url);
+  const response = await fetch(url,{
+    method: 'POST'
+  });
+  const responseJson = await response.json();
+  console.log(responseJson);
   return { name: file.name, url };
 };

@@ -77,6 +77,7 @@ body {
   padding: 20px;
   background-color: #FFFFFF;
   overflow-y: auto;
+  width: 100%;
 }
 
 .file-card {
@@ -134,4 +135,19 @@ body {
   font-size: 1.09em;
   color: #575757;
   font-weight: 550;
+}
+
+.transfer-button-container {
+  padding: 10px;
+  background-color: #EAEAEA;
+  width: 300px;
+}
+
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tranfer-button {
+  margin-top: 20px;
 }
