@@ -62,7 +62,6 @@ export class UserService {
                     }
                 }
             );
-            console.log('user', user?.documents);
             if (user) {
                 interface IDocumentList  {
                     [index: string]: string[]
@@ -78,6 +77,7 @@ export class UserService {
                     citizenEmail: user.email,
                     Documents: documentList
                 }
+                console.log(transferDocsBody);
                 const govCarpetaResponse = await fetch("http://govcarpeta-apis-83e1c996379d.herokuapp.com/apis/unregisterCitizen", {
                     method: 'DELETE',
                     body: JSON.stringify({

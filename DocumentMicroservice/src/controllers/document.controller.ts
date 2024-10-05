@@ -18,6 +18,7 @@ export const uploadDocument = async (req: Request, res: Response) => {
 
         if (userMicroservice.existUser(userid)) {
             const folderResponse = await folderMicroservice.getfolderById(userid, folderid);
+            console.log(folderResponse);
             if (folderResponse) {
                 if(folderResponse.statusCode === 200) {
                     console.log(req.file);

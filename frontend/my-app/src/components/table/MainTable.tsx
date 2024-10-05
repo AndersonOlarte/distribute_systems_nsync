@@ -11,7 +11,7 @@ import { IFolderContentProps } from '../../helpers/interfaces';
 // import { FaFile } from 'react-icons/fa'
 import { FaFile } from 'react-icons/fa';
 import { Button } from '@mui/material';
-import { GOV_CARPETA_URL } from '../../url';
+import { CERTIFICATE_DOC_URL, GOV_CARPETA_URL } from '../../url';
 
 interface Column {
   id: 'name' | 'CreatedDate' | 'type';
@@ -79,7 +79,7 @@ export default function StickyHeadTable(props: IFolderContentProps) {
   const onClickCertificateDoc = async (data: {url: string,name: string }) => {
     // console.log(url);
     try {
-      await fetch(`${GOV_CARPETA_URL}/apis/authenticateDocument`, {
+      await fetch(`${CERTIFICATE_DOC_URL}`, {
         method: 'PUT',
         body: JSON.stringify({
           idCitizen: props.userid,

@@ -8,7 +8,6 @@ export class FolderMicroservice {
     async createRootFolder(userId: number): Promise<boolean> {
         try {
             const folderMicroserviceURL = `${process.env.FOLDER_SERVICE_URL}:${process.env.FOLDER_SERVICE_PORT}/v1/users/${userId}/folders/root-folder`;
-            console.log(folderMicroserviceURL);
             const folderMicroserviceReq = await fetch(folderMicroserviceURL,{
                 method: 'POST',
             });
@@ -16,7 +15,7 @@ export class FolderMicroservice {
             if (httpStatusCode === 201) return true;
             return false;
         } catch (error) {
-            console.error('there was an error trying to create root folder');
+            console.error('there was an error trying to create root folder', error);
             return false;
         }
     }

@@ -32,6 +32,7 @@ export const createFolder = async (req: Request, res: Response) => {
 
 export const createRootFolder = async (req: Request, res: Response) => {
     try {
+        console.log('creating root folder');
         const ownerId = parseInt(req.params.userid);
         if(ownerId) {
             const rootFolder = await folderService.createRootFolderForNewUser(ownerId);

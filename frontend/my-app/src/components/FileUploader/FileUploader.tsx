@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { uploadFile } from '../../Services/fileService';
+import { DOCUMENT_MICROSERVICE_URL } from '../../url';
 
 interface FileUploaderProps {
   onUpload: (file: UploadedFile) => void;
@@ -31,7 +32,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onUpload }) => {
   return (
     <div>
       <h2>Upload a file</h2>
-      <form action="http://localhost:3000/v1/users/23423/folders/2/document" method="post" encType="multipart/form-data">
+      <form action={`${DOCUMENT_MICROSERVICE_URL}/v1/users/20023/folders/1/document`} method="post" encType="multipart/form-data">
         <input type="file" name="newFile"onChange={handleFileChange}/>
         <button type="submit" className="button" onClick={handleUpload}>Upload file</button>
     </form>

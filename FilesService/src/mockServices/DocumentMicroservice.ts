@@ -5,7 +5,8 @@ export class DocumentMicroservice {
 
 
     async getDocumentsByFolderId(userid: number, folderid: number): Promise<GetDocumentsByFolderId | null> {
-        const documentMicroserviceURL = `http://a1d7b2052bfbf4f0a9091668e9a10ec4-410648471.us-east-1.elb.amazonaws.com/v1/users/${userid}/folders/${folderid}/documents`
+        
+        const documentMicroserviceURL = `${process.env.DOCUMENT_SERVICE_URL}:3000/v1/users/${userid}/folders/${folderid}/documents`
         
         try {
             const documentMicroseriveReq  = await fetch(documentMicroserviceURL);
