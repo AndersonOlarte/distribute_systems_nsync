@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { deleteUserDocuments, getDocumentsByFolderId, upload, uploadDocument, uploadFilesFromTransfer } from '../controllers/document.controller';
+import { deleteUserDocuments, getDocumentsByFolderId, info, upload, uploadDocument, uploadFilesFromTransfer } from '../controllers/document.controller';
 
 
 const routerDocument = Router();
@@ -11,5 +11,6 @@ routerDocument.delete('/v1/users/:userid/delete-docs', deleteUserDocuments);
 
 routerDocument.post('/v1/users/:userid/transfer-docs',uploadFilesFromTransfer);
 
+routerDocument.get('/v1/info',info );
 
 export default routerDocument;

@@ -114,6 +114,15 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 }
 
+export const info = async (req: Request, res: Response) => {
+    try {
+        res.status(200).send('OK');
+    } catch (error) {
+        res.status(500).send({
+            message: 'there was an error'
+        })
+    }
+}
 // export const initiateTranferProcess = async (req: Request, res: Response) => {
 //     try {
 //         const userid = parseInt(req.params.id);

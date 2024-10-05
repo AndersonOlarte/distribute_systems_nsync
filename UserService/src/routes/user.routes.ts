@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { confirmUserTransfer, createNewUser, deleteUserById, getUserById, tranferUserDocuments } from "../controllers/user.controller";
+import { confirmUserTransfer, createNewUser, deleteUserById, getUserById, info, tranferUserDocuments } from "../controllers/user.controller";
 
 const userRouter = Router();
 
@@ -13,6 +13,6 @@ userRouter.post('/v1/users/:userid/transfer', tranferUserDocuments);
 
 userRouter.get('/v1/users/:userid/transfer', confirmUserTransfer);
 
-
+userRouter.get('/v1/info',info );
 
 export default userRouter;

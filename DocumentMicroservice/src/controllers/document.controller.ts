@@ -88,11 +88,6 @@ export const deleteUserDocuments = async (req: Request, res: Response) => {
 export const uploadFilesFromTransfer = async (req: Request, res: Response) => {
     try {
         const userid = req.body.id;
-        // const documents: string[] = req.body.Documents;{"documents": [{"document1":url1}...]}
-        // const documents = [
-        //     'https://sistemas-distribuidos-gov-carpeta.s3.amazonaws.com/20024/root/sample.pdf',
-        //     'https://sistemas-distribuidos-gov-carpeta.s3.amazonaws.com/20024/root/sample.pdf'
-        // ];
         const documents: ITranferredDocs = req.body;
         console.log(documents)
         if (documents) {
@@ -107,5 +102,14 @@ export const uploadFilesFromTransfer = async (req: Request, res: Response) => {
             message: 'there was an error'
         })
     }
+}
 
+export const info = async (req: Request, res: Response) => {
+    try {
+        res.status(200).send('OK');
+    } catch (error) {
+        res.status(500).send({
+            message: 'there was an error'
+        })
+    }
 }

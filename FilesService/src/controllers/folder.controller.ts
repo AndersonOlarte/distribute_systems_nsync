@@ -181,3 +181,13 @@ export const getFolderContent = async (req:Request, res: Response) => {
     }
 }
 
+export const info = async (req: Request, res: Response) => {
+    try {
+        res.status(200).send('OK');
+    } catch (error) {
+        res.status(500).send({
+            message: 'there was an error'
+        })
+    }
+}
+
