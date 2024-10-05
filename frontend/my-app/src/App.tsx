@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import FileUploader from './components/FileUploader/FileUploader';
 import './App.css';
 import { UploadedFile } from './Services/fileService';
@@ -10,8 +10,8 @@ import exampleOperatorsJson from './helpers/responseOperators.json';
 import { Button, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 const App: React.FC = () => {
-  const [userId, setUserId] = useState<string>('1');
-  const [folderId, setFolderId] = useState<number>(0);
+  const [userId, setUserId] = useState<string>('23423');
+  const [folderId, setFolderId] = useState<number>(2);
   const [folderContentItems, setCurrentFolderContent] = useState<IFolderContent[]>([]);
   const [operators, setOperators] = useState<IOperator[]>([]);
   const [transferURL, setTransferURL] = useState<string>(''); // Estado para almacenar la URL de transferencia seleccionada
@@ -32,6 +32,12 @@ const App: React.FC = () => {
       } catch (error) {
         console.error('Error fetching folder content:', error);
       }
+    };
+
+    const override: CSSProperties = {
+      display: "block",
+      margin: "0 auto",
+      borderColor: "red",
     };
 
     getRootFolderContent();
@@ -115,6 +121,14 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
+        <ClipLoader
+        color={color}
+        loading={loading}
+        cssOverride={override}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
       {/* Sidebar */}
       <div className="sidebar">
         <h2>My Drive</h2>

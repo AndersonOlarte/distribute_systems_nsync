@@ -6,7 +6,7 @@ const PORT = 3002;
 
 async function main() {
     try {
-        app.listen(parseInt('3002') , '0.0.0.0');
+        app.listen(3002 , '0.0.0.0');
         await startConnetionWithDb();
         console.log('Database initialized');
         console.log('Server is listening port: ', PORT);
