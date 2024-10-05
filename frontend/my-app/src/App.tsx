@@ -18,7 +18,7 @@ const App: React.FC = () => {
   const [selectedOperator, setSelectedOperator] = useState<string>(''); // Estado para almacenar el nombre del operador seleccionado
 
   useEffect(() => {
-    localStorage.setItem('userid', '23423');
+    sessionStorage.getItem('userid');
     const storedUser = '23423';
     if (storedUser) {
       setUserId(storedUser);
