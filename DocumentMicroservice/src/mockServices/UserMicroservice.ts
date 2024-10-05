@@ -3,7 +3,7 @@
 
 export class UserMicroservice {
 
-    existUser(id: number) {
+    existUser(id: string) {
         return true;
     }
 }

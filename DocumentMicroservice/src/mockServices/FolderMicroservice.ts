@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { GetUserByIdOutput } from "../helpers/FolderMicroservices.types";
 
 export class FolderMicroservice {
-    async existFolderForUser(userid: number, folderid: number): Promise<boolean> {
+    async existFolderForUser(userid: string, folderid: number): Promise<boolean> {
         try {
             const folderRetrieved = await this.getfolderById(userid, folderid);
             if (folderRetrieved) return true;
@@ -14,7 +14,7 @@ export class FolderMicroservice {
         }
     }
 
-    async getfolderById(userid: number, folderid: number) {
+    async getfolderById(userid: string, folderid: number) {
         const folderMicroserviceURL = `${process.env.FOLDER_SERVICE_URL}:${process.env.FOLDER_SERVICE_PORT}/v1/users/${userid}/folders/${folderid}`
         try {
             const folderMicroserviceReq = await fetch(folderMicroserviceURL);

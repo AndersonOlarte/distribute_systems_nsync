@@ -5,8 +5,9 @@
 // export const CERTIFICATE_DOC_URL = "http://a48d91beddf274979b83fd2580ba0b0e-84161238.us-east-1.elb.amazonaws.com:8080/api/doc"
 
 
-export const DOCUMENT_MICROSERVICE_URL = 'http://localhost:3000';
-export const FILE_MICROSERVICE_URL = 'http://localhost:3001';
+export const DOCUMENT_MICROSERVICE_URL = 'http://127.0.0.1:3000';
+export const FILE_MICROSERVICE_URL = 'http://127.0.0.1:3001';
 export const GOV_CARPETA_URL = 'http://govcarpeta-apis-83e1c996379d.herokuapp.com';
-export const USER_MICROSERVICE_URL = 'http://localhost:3001';
+// export const USER_MICROSERVICE_URL = 'https://a8ed037daf2624a7789a8d3f77bb0876-1513300967.us-east-1.elb.amazonaws.com:3002/';
+export const USER_MICROSERVICE_URL = 'http://127.0.0.1:3002';
 export const CERTIFICATE_DOC_URL = "http://a48d91beddf274979b83fd2580ba0b0e-84161238.us-east-1.elb.amazonaws.com:8080/api/doc"

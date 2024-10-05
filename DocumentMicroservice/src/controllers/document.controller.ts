@@ -14,7 +14,7 @@ export const upload = multer({});
 
 export const uploadDocument = async (req: Request, res: Response) => {
     try {
-        const userid = parseInt(req.params.userid);
+        const userid = req.params.userid;
         const folderid = parseInt(req.params.folderid);
 
         if (userMicroservice.existUser(userid)) {
@@ -47,7 +47,7 @@ export const uploadDocument = async (req: Request, res: Response) => {
 }
 
 export const getDocumentsByFolderId = async (req: Request, res: Response) => {
-    const userId = parseInt(req.params.userid);
+    const userId = req.params.userid;
     const folderId = parseInt(req.params.folderid);
     try {
         const folderResponse = await folderMicroservice.getfolderById(userId, folderId);

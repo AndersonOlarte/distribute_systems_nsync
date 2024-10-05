@@ -1,3 +1,4 @@
+import { DOCUMENT_MICROSERVICE_URL } from '../url';
 import { storage } from './firebase'; // Firebase configuration file
 
 export interface UploadedFile {
@@ -6,7 +7,7 @@ export interface UploadedFile {
 }
 
 export const uploadFile = async (file: File, userId: string, folderid: number): Promise<UploadedFile> => {
-  const url = `http://localhost:3000/v1/users/${userId}/folders/${folderid}/document`
+  const url = `${DOCUMENT_MICROSERVICE_URL}/v1/users/${userId}/folders/${folderid}/document`
   console.log(url);
   const response = await fetch(url,{
     method: 'POST'
