@@ -50,8 +50,10 @@ function createData(
   return { name, CreatedDate, type, url };
 }
 
-const OnClickRow = async (url: string) => {
-  window.open(url, '_blank')
+const OnClickRow = async (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>, url: string) => {
+  if (!(event.target instanceof HTMLButtonElement)) {
+    window.open(url, '_blank');
+  }
 }
 
 
@@ -75,8 +77,9 @@ export default function StickyHeadTable(props: IFolderContentProps) {
   };
 
   const onClickCertificateDoc = async (data: {url: string,name: string }) => {
+    // console.log(url);
     try {
-      await fetch(GOV_CARPETA_URL, {
+      await fetch(`${GOV_CARPETA_URL}/apis/authenticateDocument`, {
         method: 'PUT',
         body: JSON.stringify({
           idCitizen: props.userid,
@@ -114,7 +117,7 @@ export default function StickyHeadTable(props: IFolderContentProps) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.name} onClick={() => OnClickRow(row.url)} >
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.name} onClick={(event) => OnClickRow(event ,row.url)} >
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (

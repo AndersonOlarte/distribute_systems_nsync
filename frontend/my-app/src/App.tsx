@@ -7,23 +7,23 @@ import { IDisplayFolders, IFolderContent, IFolderContentProps, IOperator } from 
 import StickyHeadTable from './components/table/MainTable';
 import { FILE_MICROSERVICE_URL, GOV_CARPETA_URL, USER_MICROSERVICE_URL } from './url';
 import exampleOperatorsJson from './helpers/responseOperators.json';
-import { Button, InputLabel, MenuItem, Select } from '@mui/material';
+import { Button, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 const App: React.FC = () => {
-
-
   const [userId, setUserId] = useState<string>('1');
   const [folderId, setFolderId] = useState<number>(0);
   const [folderContentItems, setCurrentFolderContent] = useState<IFolderContent[]>([]);
   const [operators, setOperators] = useState<IOperator[]>([]);
-  const [transferURL, setTransferURL] = useState<string>('');
+  const [transferURL, setTransferURL] = useState<string>(''); // Estado para almacenar la URL de transferencia seleccionada
+  const [selectedOperator, setSelectedOperator] = useState<string>(''); // Estado para almacenar el nombre del operador seleccionado
 
   useEffect(() => {
-        localStorage.setItem('userid', '23423');
-        const storedUser = '23423';
-        if (storedUser) {
-          setUserId(storedUser);
-        }
+    localStorage.setItem('userid', '23423');
+    const storedUser = '23423';
+    if (storedUser) {
+      setUserId(storedUser);
+    }
+
     const getRootFolderContent = async () => {
       try {
         const response = await fetch(`${FILE_MICROSERVICE_URL}/v1/users/${storedUser}/folders/root-folder`);
@@ -40,45 +40,59 @@ const App: React.FC = () => {
   useEffect(() => {
     const getOperators = async () => {
       const setDataFromJson = (operators: IOperator[]) => {
-        operators.map((operator)=> {
+        operators.forEach((operator) => {
           const operatorData: IOperator = {
             participants: operator.participants,
             _id: operator._id,
             operatorName: operator.operatorName,
             transferAPIURL: operator.transferAPIURL
-          }
+          };
           setOperators([operatorData, ...operators]);
-        } )   
-      }
+        });
+      };
+
       try {
-        const response = await fetch(`${GOV_CARPETA_URL}/apis/getOperators`);
-        const responseJson: IOperator[] = await response.json();
+        const response = await fetch(`https://ocrf9nzqde.execute-api.us-east-1.amazonaws.com/prod/documents/operators`);
+        const responseJson: IOperator[] = (await response.json()).body;
         setDataFromJson(responseJson);
       } catch (error) {
-        console.log('there was an error retriving operators. Using mock data: ',error);     
-        setDataFromJson(exampleOperatorsJson);
+        console.log('There was an error retrieving operators. Using mock data: ', error);
+        // setDataFromJson(exampleOperatorsJson);
       }
     };
     getOperators();
-  }, [])
+  }, []);
 
+  const onCHangeTransferOperator = (event: SelectChangeEvent) => {
+    const operatorName = event.target.value;
+    setSelectedOperator(operatorName);
 
-  const onClickTransferOperator = (event:any) => {
-    try {
-      console.log('url: ', transferURL);
-      fetch(`${USER_MICROSERVICE_URL}/v1/users/${userId}}/transfer`,
-        {
-          method: 'POST',
-          body: JSON.stringify({url: transferURL})
-        }
-      )
-      alert('transfer reques sent to operator');
-    } catch (error) {
-      
-      alert('There was an issue sending transfer request');
+    const selectedOperatorData = operators.find((op) => op.operatorName === operatorName);
+    if (selectedOperatorData && selectedOperatorData.transferAPIURL) {
+      setTransferURL(selectedOperatorData.transferAPIURL);
+      console.log('URL selected: ', selectedOperatorData.transferAPIURL);
     }
+  };
 
-  }
+  const onClickTransferOperator = async (event: any) => {
+    try {
+      const response = await fetch(`${USER_MICROSERVICE_URL}/v1/users/${userId}/transfer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url: transferURL })
+      });
+
+      if (response.ok) {
+        alert('Transfer request sent to operator');
+      } else {
+        alert('Failed to send transfer request');
+      }
+    } catch (error) {
+      alert('There was an issue sending the transfer request');
+    }
+  };
 
   const [folderItem, setFolderContent] = useState<UploadedFile[]>([]);
 
@@ -88,16 +102,16 @@ const App: React.FC = () => {
 
   const folderContentProperties: IDisplayFolders = {
     folderContent: folderContentItems ?? [],
-    setFolderContent: setCurrentFolderContent ,
+    setFolderContent: setCurrentFolderContent,
     folderId: folderId,
     userId: userId,
     setFolderId: setFolderId
-  }
+  };
 
   const tableContentProperties: IFolderContentProps = {
     folderContent: folderContentItems ?? [],
     userid: userId
-  }
+  };
 
   return (
     <div className="container">
@@ -109,10 +123,6 @@ const App: React.FC = () => {
           <li>Shared with me</li>
           <li>Recent</li>
           <li>Trash</li>
-
-            <li>
- 
-            </li>
         </ul>
       </div>
 
@@ -124,40 +134,37 @@ const App: React.FC = () => {
           <FileUploader onUpload={handleFileUpload} />
         </div>
 
-      {/* File List */}
-      <div className='sub-header'>
-        <div className="file-grid">
-        <FolderContent {...folderContentProperties}></FolderContent>
-        </div>
-        <div className='transfer-button-container'>
-              <InputLabel id="demo-simple-select-label" variant='standard'>Cambio de operador</InputLabel>
-            <Select autoWidth = {true}
-            fullWidth
-              labelId="select-operators"
-              id="operators"
-              value={operators[0]}
-              label="operatorName"
-              // onChange= {setTransferURL}
+        {/* File List */}
+        <div className="sub-header">
+          <div className="file-grid">
+            <FolderContent {...folderContentProperties}></FolderContent>
+          </div>
+
+          {/* Transfer Operator Section */}
+          <div className="transfer-button-container">
+            <InputLabel id="operator-select-label">Cambio de operador</InputLabel>
+            <Select
+              labelId="operator-select-label"
+              id="operator-select"
+              value={selectedOperator}
+              onChange={onCHangeTransferOperator}
+              fullWidth
+              variant="standard"
             >
-               {operators.map((operator, index) => {
-              if (operator.transferAPIURL) {
-                return (
-                  <MenuItem 
-                    value={operator.operatorName}
-                    key={index} 
-                      onClick={() => setTransferURL(operator.transferAPIURL || '')}
-                  >
-                    {operator.operatorName}</MenuItem>
-                  )
-              }
-            })}
+              {operators.map((operator,index) => (
+                <MenuItem key={operator._id+index} value={operator.operatorName}>
+                  {operator.operatorName}
+                </MenuItem>
+              ))}
             </Select>
-            <div className='tranfer-button'>
-                <Button variant="contained" color = "success" onClick={onClickTransferOperator} size='small'>Tranferir Docs</Button>
+            <div className="transfer-button">
+              <Button variant="contained" color="success" onClick={onClickTransferOperator} size="small">
+                Transferir Docs
+              </Button>
             </div>
-              </div>
-      </div>
-       
+          </div>
+        </div>
+
         <section className="table-container">
           <StickyHeadTable {...tableContentProperties}></StickyHeadTable>
         </section>
