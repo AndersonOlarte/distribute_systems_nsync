@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: user-migration-citizen-confirm-consumer-container
-        image: juanda0/user-migration-citizen-confirm-consumer-service:1.0
+        image: juanda0/user-migration-citizen-confirm-consumer-service:1.1
         ports:
         - containerPort: 5672
         env:
