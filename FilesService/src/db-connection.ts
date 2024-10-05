@@ -9,7 +9,8 @@ dotenv.config();
 const AppDataSource = new DataSource({
     type: 'postgres',
     database: process.env.DATABASE_NAME,
-    host: process.env.DATABASE_HOST,
+    // host: process.env.DATABASE_HOST,
+    host: 'a3f45e12c525d49cfb8872155447f43b-1061106432.us-east-1.elb.amazonaws.com',
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     port: parseInt(process.env.DATABASE_PORT !== undefined ? process.env.DATABASE_PORT: '5432') ,

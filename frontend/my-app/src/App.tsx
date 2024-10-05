@@ -121,14 +121,14 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
-        <ClipLoader
+        {/* <ClipLoader
         color={color}
         loading={loading}
         cssOverride={override}
         size={150}
         aria-label="Loading Spinner"
         data-testid="loader"
-      />
+      /> */}
       {/* Sidebar */}
       <div className="sidebar">
         <h2>My Drive</h2>
