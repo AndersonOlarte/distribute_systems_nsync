@@ -1,4 +1,6 @@
 from app.user_migration.exceptions.invalid_request_exception import InvalidRequestException
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 class UserService:
