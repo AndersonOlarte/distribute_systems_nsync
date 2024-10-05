@@ -5,8 +5,8 @@ import { Document } from "./Document.entity";
 
 @Entity('User')
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @Column({primary: true})
+    id: string;
 
     @Column()
     govCarpetaId: string;
@@ -22,6 +22,9 @@ export class User extends BaseEntity {
 
     @Column()
     email: string;
+
+    @Column({default: false})
+    transferRequest: boolean;
 
     @CreateDateColumn()
     createdDate: Date;

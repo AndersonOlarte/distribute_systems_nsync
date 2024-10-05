@@ -6,7 +6,7 @@ export class UserService {
         return new Promise(async (resolve, reject) => {
             try {
                 const user = await userRepository.findOneBy({
-                    id: userId
+                    id: userId.toString()
                 })
                 console.log(user);
                 if (user) resolve(user);

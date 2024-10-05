@@ -5,7 +5,9 @@ import { UserService } from "./user.service";
 import { DocumentMicroservice } from "../mockServices/DocumentMicroservice";
 import { Document } from "../entities/Document.entity";
 import { FolderContent } from "../helpers/folder.types";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 export class FolderService {
     private userService = new UserService();
@@ -51,7 +53,11 @@ export class FolderService {
                         id: folderId
                     }
                 })
-                resolve(folder);
+        console.info('testing creating new folder', folder);
+                if (folder) {
+                    resolve(folder);
+                }
+                reject('there is not folder with id: '+ folderId);
             } catch (error) {
                 reject('there was an error getting folder by ID');
                 
@@ -81,6 +87,7 @@ export class FolderService {
                 }
                 reject('there was not a user with ID '+ userId );
             } catch (error) {
+                console.error(error);
                 reject('there was an erro trying to create root folder');
                 
             }
@@ -90,6 +97,7 @@ export class FolderService {
     async createNewFolder(folderName:string, folderParentId: number): Promise<Folder> {
         return new Promise(async (resolve, reject) => {
             if (await this.folderIdExist(folderParentId)) {
+
                 const parentFolder = await this.getFolderMetaDataById(folderParentId);
                 if(parentFolder?.level || parentFolder?.level === 0) {
                     const newFolder = new Folder();
@@ -155,6 +163,7 @@ export class FolderService {
             if(foldersInFolder) {
                 foldersInFolder.forEach((folder)=> {
                     folderContent.push({
+                        id: folder.id,
                         name: folder.name,
                         type: 'Folder',
                         LastModified: folder.updatedDate
@@ -164,9 +173,11 @@ export class FolderService {
             if (filesInFolder) {
                 filesInFolder.forEach((file) => {
                     folderContent.push({
+                        id: file.id,
                         name: file.filename,
                         type: 'File',
                         LastModified: file.updatedDate,
+                        url: encodeURI(`${process.env.BUCKET_URL}/${file.url}`)
                     })
                 })
             };
@@ -197,7 +208,7 @@ export class FolderService {
         try {
             const deleteProcessResult = await folderRepository.delete({
                 owner: {
-                    id: userId
+                    id: userId.toString()
                 }
             })
             if (deleteProcessResult.affected) return true;
@@ -212,7 +223,7 @@ export class FolderService {
         try {
             const rootFolder = await folderRepository.findOneBy({
                 owner: {
-                    id: userid
+                    id: userid.toString()
                 },
                 isRootFolder: true
             })

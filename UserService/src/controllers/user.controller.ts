@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { UserInput } from "../entities/User.entity";
+import { error } from "console";
 
 const userService = new UserService();
 
@@ -68,6 +69,47 @@ export const tranferUserDocuments = async (req: Request, res: Response) => {
     }
 }
 
-export const getRootFolderContent = async (req: Request, res: Response) => {
+export const confirmUserTransfer = async (req: Request, res: Response) => {
+    try {
+        const userId = parseInt(req.params.userid);
+        if (userId) {
+            const transferConfirmation = await userService.confirmUserTransfer(userId);
+            return res.status(200).send({
+                userId,
+                transferConfirmation,
+            });
+        }
+        return res.status(400).send({
+            message: 'user ID missing'
+        })
+    } catch (error) {
+        console.error('there was an error trying to confirm user transfer', error);
+        res.status(500).send({
+            message: 'internal server error'
+        })
+    }
 
 }
+
+// export const initiateTranferProcess = async (req: Request, res: Response) => {
+//     try {
+//         const userid = parseInt(req.params.id);
+//         if (userid) {
+//             const transferConfirmation = await userService.activateRequestTransfer(userid);
+//             if (transferConfirmation) {
+//                 res.status(200).send({
+//                     message: 'Trasfer process initiated succesfully'
+//                 });
+//             }
+//             throw error;
+//         } 
+//         return res.status(400).send({
+//             message: 'Missing user ID'
+//         })    
+//     } catch (error) {
+//         console.error('there was an error trying to start tranfer process', error);
+//         return res.status(500).send({
+//             message: 'error initiating transfer process'
+//         });
+//     }
+// }

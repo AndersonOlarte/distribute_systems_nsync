@@ -3,7 +3,9 @@ import { User, UserInput } from "../entities/User.entity";
 import { DocumentMicroservice } from "../helpers/DocumentMicroservice";
 import { FolderMicroservice } from "../helpers/folder.microservice";
 import { IFolderItem } from "../helpers/FolderMicroservices.types";
+import dotenv from 'dotenv'
 
+dotenv.config();
 
 
 
@@ -20,7 +22,7 @@ export class UserService {
         try {
             await this.documentMicroservice.deleteDocumentsByUserId(userId);
             const deleteResult = await userRepository.delete({
-                id: userId
+                id: userId.toString()
             });
             if (deleteResult.affected) return true;
             return false;
@@ -37,8 +39,9 @@ export class UserService {
             newUser.email = userInput.email;
             newUser.identification = userInput.identification || '';
             newUser.govCarpetaId = userInput.govCarpetaId;
+            newUser.id = userInput.govCarpetaId;
             await newUser.save();
-            const wasUserCreated = await this.folderMicroservice.createRootFolder(newUser.id);
+            const wasUserCreated = await this.folderMicroservice.createRootFolder(parseInt(newUser.id));
             if (wasUserCreated) return newUser;
             return null;
 
@@ -55,7 +58,7 @@ export class UserService {
                         documents: true,
                     },
                     where: {
-                        id: userid
+                        id: userid.toString()
                     }
                 }
             );
@@ -75,7 +78,7 @@ export class UserService {
                     citizenEmail: user.email,
                     Documents: documentList
                 }
-                const govCarpetaResponse = await fetch("govcarpeta-apis-83e1c996379d.herokuapp.com/", {
+                const govCarpetaResponse = await fetch("http://govcarpeta-apis-83e1c996379d.herokuapp.com/apis/unregisterCitizen", {
                     method: 'DELETE',
                     body: JSON.stringify({
                         id: user.govCarpetaId,
@@ -88,12 +91,13 @@ export class UserService {
                         method: 'POST',
                         body: JSON.stringify(transferDocsBody)
                     });
+                    user.transferRequest = true;
+                    await user.save();
                     return true;
                 }
                 else {
                     return false;
                 }
-                
             }
             return null;
         } catch (error) {
@@ -109,7 +113,7 @@ export class UserService {
                     folders: true
                 },
                 where:{
-                    id: userid
+                    id: userid.toString()
                 }
             });
             if (user) {
@@ -126,4 +130,23 @@ export class UserService {
             return null;
         }
     }
+
+    async confirmUserTransfer (userId: number) {
+        const user = await userRepository.findOneByOrFail({
+            id: userId.toString()
+        });
+        return user.transferRequest;
+    }
+//     async activateRequestTransfer(userid: number): Promise <boolean> {
+//         const user = await userRepository.findOneBy({
+//             id: userid
+//         });
+//         if (user) {
+//             user.transferRequest = true;
+//             await user.save();
+//             return true;
+//         }
+//         console.log('there was not user with id: ', userid);
+//         return false;
+//     }
 }
