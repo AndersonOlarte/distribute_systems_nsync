@@ -199,7 +199,6 @@ Werkzeug = ">=3.0.0"
 
 [package.extras]
 async = ["asgiref (>=3.2)"]
-dotenv = ["python-dotenv"]
 
 [[package]]
 name = "flask-restx"
